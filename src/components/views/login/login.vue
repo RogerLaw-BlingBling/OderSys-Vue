@@ -68,8 +68,8 @@
 <script src="./login.js"></script>    
 
 
-<style lang="scss" scoped>
-@import url("./login.scss");
+<style lang="less" scoped>
+@import url("./login.less");
 </style>
 
 

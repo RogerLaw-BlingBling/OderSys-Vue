@@ -118,6 +118,6 @@
 
 <script src="./main.js"></script> 
 
-<style lang="scss" scoped>
-@import "../main/main.scss";
+<style lang="less" scoped>
+@import "../main/main.less";
 </style>

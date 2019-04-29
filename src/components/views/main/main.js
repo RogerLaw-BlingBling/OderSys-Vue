@@ -56,6 +56,18 @@ export default {
     defaultActive: function () {
       return this.$route.path.replace('/', '')
     }
+  },
+  created () {
+    // this.$axios({
+    // method: 'post',
+    //   url: '/user/12345',
+    //   data: {}
+    // }).then((res)=>{
+    // 成功的处理
+    // }).catch(err=>{
+    // 失败的处理
+    // })
+    // this.$axios.get('xxxx',{参数}).then()
   }
 
 }
