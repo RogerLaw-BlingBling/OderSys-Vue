@@ -51,13 +51,13 @@
       ></el-pagination>
     </el-col>
     <!-- 编辑界面 -->
-    <el-dialog title="编辑" v-model="editFormVisible" :close-on-click-modal="false">
+    <el-dialog title="编辑" :visible.sync="editFormVisible" :close-on-click-modal="false">
       <el-form :model="editForm" label-width="80px" rules="editFormRules" ref="editForm">
         <el-form-item label="工程名" prop="projectName">
           <el-input v-model="editForm.projectName" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="工程状态" prop="status">
-          <el-input v-model="editForm.projectName" auto-complete="off"></el-input>
+          <el-input v-model="editForm.status" auto-complete="off"></el-input>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -119,7 +119,7 @@ export default {
    handleEdit: function(index, row) {
       this.editFormVisible = true;
       this.editForm = Object.assign({}, row);
-      window.alert("点击成功");
+      // window.alert("点击成功");
     },
     selsChange: function(sels) {
       this.sels = sels;
