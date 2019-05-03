@@ -25,12 +25,12 @@
     >
       <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column type="index" width="60"></el-table-column>
-      <el-table-column prop="project-name" label="项目名" width="120" sortable></el-table-column>
-      <el-table-column prop="status" label="项目状态" width="100" sortable></el-table-column>
+      <el-table-column prop="projectname" label="项目名" width="120" sortable></el-table-column>
+      <el-table-column prop="status" label="工程状态" width="100" sortable></el-table-column>
       <el-table-column prop="begin-time" label="起始时间" width="100" sortable></el-table-column>
       <el-table-column prop="end-time" label="结束时间" width="100" sortable></el-table-column>
       <el-table-column prop="duration" label="预计工期" width="100" sortable></el-table-column>
-      <el-table-column prop="status" label="交接人" min-width="180" sortable></el-table-column>
+      <el-table-column prop="handlername" label="交接人" min-width="180" sortable></el-table-column>
       <el-table-column label="操作" width="150">
         <template scope="scope">
           <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
@@ -50,20 +50,61 @@
         style="float:right;"
       ></el-pagination>
     </el-col>
+    <!-- 编辑界面 -->
+    <el-dialog title="编辑" v-model="editFormVisible" :close-on-click-modal="false">
+      <el-form :model="editForm" label-width="80px" rules="editFormRules" ref="editForm">
+        <el-form-item label="工程名" prop="projectName">
+          <el-input v-model="editForm.projectName" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="工程状态" prop="status">
+          <el-input v-model="editForm.projectName" auto-complete="off"></el-input>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </section>
 </template>
 
 <script>
+import { write } from 'fs';
 export default {
   data() {
     return {
       filters: {
-        projectName: ''
+        id: '',
+        projectName: '',
+        status: '',
+        beginTime: '',
+        endTime: '',
+        duration: '',
+        contactPerson: ''
       },
-      projects: [],
+      projects: [
+        {
+          projectname: "不知道啥玩意",
+          status: "进行中"
+        }
+      ],
       total: 0,
       listLoading: false,
-      sels: [] //列表选中列
+      sels: [], //列表选中列
+
+      editFormVisible: false, //编辑界面是否显示
+      editLoading: false,
+      editFormRules: {
+        projectName: [
+          { required: true, message: "请输入项目名", trigger: "blur" }
+        ]
+      },
+      //编辑界面数据
+      editForm: {
+        id: '',
+        projectName: '',
+        status: '',
+        beginTime: '',
+        endTime: '',
+        duration: '',
+        contactPerson: ''
+      }
     };
   },
   methods: {
@@ -75,11 +116,15 @@ export default {
     //删除
     handleDel: function(index, row) {},
     //显示编辑界面
-    handleEdit: function(index, row) {},
+   handleEdit: function(index, row) {
+      this.editFormVisible = true;
+      this.editForm = Object.assign({}, row);
+      window.alert("点击成功");
+    },
     selsChange: function(sels) {
       this.sels = sels;
-    },//批量删除
-			batchRemove: function () {}
+    }, //批量删除
+    batchRemove: function() {}
   }
 };
 </script>
