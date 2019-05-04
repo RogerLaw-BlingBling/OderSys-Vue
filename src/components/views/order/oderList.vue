@@ -9,7 +9,7 @@
                 <el-input v-model="orderId" placeholder="订单编号" style="width:230px"></el-input>
               </el-form-item>
               <el-form-item>
-                <el-select  placeholder="订单状态" style="width:110px">
+                <el-select   style="width:110px">
                   <el-option label="未开始" value=""></el-option>
                   <el-option label="进行中" value=""></el-option>
                   <el-option label="已结束" value=""></el-option>

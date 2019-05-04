@@ -49,7 +49,15 @@
                 <i class="el-icon-news"></i>
                 <template slot="title">&nbsp;&nbsp;首页</template>
               </el-menu-item>-->
-              <el-submenu index="1">
+               <el-submenu index="1">
+                <template slot="title">
+                  <i class="el-icon-document"></i>
+                  &nbsp;&nbsp;订单管理
+                </template>
+                <el-menu-item index="oderList" @click="toOrderList">订单列表</el-menu-item>
+                <el-menu-item index="addOder" @click="toAddOrder">订单录入</el-menu-item>
+              </el-submenu>
+              <el-submenu index="2">
                 <template slot="title">
                   <i class="el-icon-tickets"></i>
                   &nbsp;&nbsp;项目管理
@@ -58,14 +66,7 @@
                 <el-menu-item index="projectDesc" @click="toOrderDescription">项目详情</el-menu-item>
                 <el-menu-item index="demandInfo" @click="toDemandInfo">需求信息</el-menu-item>
               </el-submenu>
-              <el-submenu index="2">
-                <template slot="title">
-                  <i class="el-icon-document"></i>
-                  &nbsp;&nbsp;订单管理
-                </template>
-                <el-menu-item index="oderList" @click="toOrderList">订单列表</el-menu-item>
-                <el-menu-item index="addOder" @click="toAddOrder">订单录入</el-menu-item>
-              </el-submenu>
+             
               <el-submenu index="3">
                 <template slot="title">
                   <i class="el-icon-plus"></i>
