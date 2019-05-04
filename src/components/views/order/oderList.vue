@@ -6,13 +6,13 @@
           <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
             <el-form :inline="true" :model="order">
               <el-form-item>
-                <el-input v-model="orderId" placeholder="订单编号" style="width:230px"></el-input>
+                <el-input v-model="order.orderId" placeholder="订单编号" style="width:230px"></el-input>
               </el-form-item>
-              <el-form-item>
-                <el-select   style="width:110px">
-                  <el-option label="未开始" value=""></el-option>
-                  <el-option label="进行中" value=""></el-option>
-                  <el-option label="已结束" value=""></el-option>
+              <el-form-item prop="status">
+                <el-select v-model="order.status" style="width:110px">
+                  <el-option label="未开始" value="未开始"></el-option>
+                  <el-option label="进行中" value="进行中"></el-option>
+                  <el-option label="已结束" value="已结束"></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item>
@@ -42,8 +42,11 @@
 export default {
   data() {
     return {
-      order: "",
-      orderId: "",
+      order: {
+        orderId: '',
+        status: '',
+      },
+      
       orderTable: [
         {
           orderId: "1",
@@ -56,7 +59,8 @@ export default {
     };
   },
   methods: {
-    getOrders() {}
+    getOrders() {},
+    onSubmit: function(){}
   }
 };
 </script>
