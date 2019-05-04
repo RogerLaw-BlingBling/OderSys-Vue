@@ -1,6 +1,7 @@
-
+import axios from 'axios'
+import { create } from 'domain';
 export default {
-  data () {
+  data() {
     var checkUser = (rule, value, callback) => {
       if (!value) {
         return callback(new Error('用户名不能为空'))
@@ -32,18 +33,42 @@ export default {
     }
   },
   methods: {
-    submitForm (formName) {
+    submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert('submit!')
+            this.$axios({
+              method: 'post',
+              url: '/auth?login',
+              data: {
+                username: this.loginForm.username,
+                password: this.loginForm.password
+              }
+            }).then((res) => {
+              this.$router.push({ name: 'Main' })
+            }).catch (err=>{
+              alert('请验证用户名或密码!')
+            }) 
         } else {
           console.log('error submit!!')
           return false
         }
       })
     },
-    resetForm (formName) {
+    resetForm(formName) {
       this.$refs[formName].resetFields()
     }
-  }
+  },
+  // create():{
+  //  this.$axios({
+  //   method: 'post',
+  //     url: '/user/12345',
+  //     data: {}
+  //   }).then((res)=>{
+  //   成功的处理
+  //   }).catch(err=>{
+  //   失败的处理
+  //   })
+  //   this.$axios.get('xxxx',{参数}).then()
+  // }
+
 }
