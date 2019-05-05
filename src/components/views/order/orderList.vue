@@ -37,10 +37,9 @@
           <template slot-scope="scope">{{scope.row.orderStatus | statusType}}</template>
         </el-table-column>
         <el-table-column label="操作" width="240">
-          <template slot-scope="scope">
+<template slot-scope="scope">
             <el-button icon="el-icon-search" @click="caozuo(scope.row)" circle></el-button>
-            </template>
-        </el-table-column>
+            </template>        </el-table-column>
       </el-table>
         <el-pagination
           @size-change="handleSizeChange"
@@ -52,11 +51,32 @@
           :total="total">
         </el-pagination>
     </template>
+
+
+
+    <!--  -->
+    <!-- <el-dialog
+    title="提示"
+    :visible.sync="dialogVisible"
+    width="50%"
+    :before-close="handleClose">
+    <div class="dataJSON">
+      <div v-for="(item,index) in json" :key="index">
+        <p v-for="(item2,index2) in jsonKey" :key="index2">{{item[item2]}}</p>
+      </div>
+    </div>
+    <span slot="footer" class="dialog-footer">
+      <el-button @click="dialogVisible = false">取 消</el-button>
+      <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+    </span>
+  </el-dialog> -->
+    <!--  -->
   </div>
 </template>
 
 <script>
 import axios from 'axios'
+import { truncate } from 'fs';
 export default {
   data() {
     return {
@@ -67,14 +87,17 @@ export default {
       orderTable: [],
       currentPage: 1,//当前页
       pageSize: 10,//显示条数
-      total: 0//总数
-    };
+      total: 0,//总数   
+      handleClose: true,
+      json: [],
+      jsonKey: []
+    }
   },
   methods: {
     getOrders() {},
     onSubmit: function() {
       this.loadData();
-    },
+    },  
     toAddOrder() {
       this.$router.push({ name: "AddOrder" });
     },
@@ -102,8 +125,8 @@ export default {
       // this.loadData();
     },
     caozuo(row){
-      console.log(row);
-    }
+      console.log(row);    
+      }
   },
   filters:{//过滤器，局部的过滤的函数放这里
     statusType: function(val){
@@ -115,7 +138,7 @@ export default {
   mounted(){//页面加载自动执行，你可以放初始化的函数在这里
     this.loadData();
   }
-};
+}
 </script>
 
 <style lang="less" scoped>

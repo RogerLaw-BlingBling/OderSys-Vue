@@ -1,33 +1,5 @@
 <template>
-  <div>
-    <el-row :gutter="24">
-      <el-col :span="24">
-        <div class="grid-content bg-purple">
-          <el-upload
-            class="upload-demo"
-            ref="upload"
-            action="https://jsonplaceholder.typicode.com/posts/"
-            :on-preview="handlePreview"
-            :on-remove="handleRemove"
-            :auto-upload="false"
-          >
-            <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-            <el-button
-              style="margin-left: 10px;"
-              size="small"
-              type="success"
-              @click="submitUpload"
-            >上传到服务器</el-button>
-            <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
-          </el-upload>
-        </div>
-      </el-col>
-      <!-- <el-col :span="8">
-        <div class="grid-content bg-purple">
-          
-        </div>
-      </el-col>-->
-    </el-row>
+
     <div class="filelist">
       <template>
         <el-table :data="tableData" style="width: 100%">
