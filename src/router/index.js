@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import message from 'element-ui/lib/message';
 import store from '../store/store'
 import * as types from '../store/types'
 import Login from '@/components/views/login/login.vue'
@@ -109,25 +110,36 @@ let router= new Router({
   ]
 })
 // 页面刷新时，重新赋值token
-if (window.localStorage.getItem('token')) {
-  store.commit(types.LOGIN, window.localStorage.getItem('token'))
-}
+// if (window.localStorage.getItem('token')) {
+//   store.commit(types.LOGIN, window.localStorage.getItem('token'))
+// }
 
 router.beforeEach((to, from, next)=>{
+  // if(to.meta.requrieAuth){
+  //   if(store.state.token){
+  //     next();
+  //   }
+  //   else{
+  //     next({
+  //       path: '/',
+  //       // query:{redirect:to.fullPath}
+  //     })
+  //   }
+  // }
+  // else{
+  //   next();
+  // }
   if(to.meta.requrieAuth){
-    if(store.state.token){
+    if(sessionStorage.getItem('username')){
       next();
+    } else {
+      message.warning('请先登录');
+      router.push({name: 'Login'});
     }
-    else{
-      next({
-        path: '/',
-        // query:{redirect:to.fullPath}
-      })
-    }
-  }
-  else{
+  } else{
     next();
   }
+  
 })
 
 export default router

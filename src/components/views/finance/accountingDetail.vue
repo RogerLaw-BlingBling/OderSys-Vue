@@ -71,7 +71,7 @@
 <!--                   <el-table-column prop="paymenttime" label="录入时间" sortable width="130">
                        </el-table-column> -->
                        <el-table-column prop="paymenttime" label="录入时间" sortable width="130">
-                          <template scope="scope">
+                          <template slot-scope="scope">
                             {{scope.row.paymenttime}}
                           </template>
                        </el-table-column>
@@ -90,7 +90,7 @@
                        <el-table-column prop="jilu_get" label="收取金额(¥)" width="120">
                        </el-table-column>
                        <el-table-column fixed="right" label="操作" width="150">
-                         <template scope="scope">
+                         <template slot-scope="scope">
                          <el-button size="small" @click="editData(scope.row,scope.$index)">编辑</el-button>
                          <el-button size="small" type="danger" @click.native.prevent="deleteRow(scope.$index, tableData)">删除</el-button>
                       <!--<el-button @click.native.prevent="deleteRow(scope.$index, tableData4)" type="text" size="small">
@@ -240,7 +240,7 @@
                    <div class="jilu_table">
                      <el-table :data="tableData2" border style="width: 100%" max-height="600">
                         <el-table-column prop="paymenttime" label="录入时间" sortable width="130">
-                        <template scope="scope">
+                        <template slot-scope="scope">
                           {{scope.row.paymenttime}}
                         </template>
                         </el-table-column>
@@ -259,7 +259,7 @@
                         <el-table-column prop="jilu_charge" label="支出金额(¥)" width="120">
                         </el-table-column>
                         <el-table-column fixed="right" label="操作" width="150">
-                          <template scope="scope">
+                          <template slot-scope="scope">
                           <el-button size="small" @click="editData2(scope.row,scope.$index)">编辑</el-button>
                           <el-button size="small" type="danger" @click.native.prevent="deleteRow(scope.$index, tableData2)">删除</el-button>
                           </template>
