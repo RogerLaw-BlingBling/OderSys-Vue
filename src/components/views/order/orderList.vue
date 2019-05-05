@@ -34,14 +34,36 @@
         <el-table-column prop="orderTime" label="建立时间" width="240"></el-table-column>
         <el-table-column prop="orderStatus" label="订单状态" width="240"></el-table-column>
         <el-table-column label="操作" width="240">
-          <el-button icon="el-icon-search" circle></el-button>
+          <el-button @click="showOrderInfo" icon="el-icon-search" circle></el-button>
         </el-table-column>
       </el-table>
     </template>
+
+
+
+    <!--  -->
+    <el-dialog
+    title="提示"
+    :visible.sync="dialogVisible"
+    width="30%"
+    :before-close="handleClose">
+    <span>这是一段信息</span>
+    <!-- <div class="dataJSON">
+      <p v-for="(item,index) in json" :key="index">
+        <span v-for="(item2,index2) in jsonKey" :key="index2">{{item[item2]}}</span>
+      </p>
+    </div> -->
+    <span slot="footer" class="dialog-footer">
+      <el-button @click="dialogVisible = false">取 消</el-button>
+      <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+    </span>
+  </el-dialog>
+    <!--  -->
   </div>
 </template>
 
 <script>
+import json from '../../../config/cor_Info.js'
 export default {
   data() {
     return {
@@ -58,14 +80,29 @@ export default {
           orderTime: "2019-05-24",
           orderStatus: "进行中"
         }
-      ]
+      ],
+      dialogVisible:false,
+      json:json.content,
+      jsonKey:[ "id","orderId","customerId","orderStatus","title","paymentTimes","handlerName","createTime","comments","orderTotal"]
     };
   },
   methods: {
     getOrders() {},
-    onSubmit: function() {},
+    onSubmit: function() {
+    },
     toAddOrder() {
       this.$router.push({ name: "AddOrder" });
+    },
+    showOrderInfo(){
+      // 
+      this.$confirm('确认关闭？')
+        .then(_ => {
+          done();
+        })
+        .catch(_ => {});
+    },
+    handleClose(){
+      // 
     }
   }
 };
