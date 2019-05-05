@@ -84,6 +84,23 @@
         <el-form-item label="交接人">
           <el-input v-model="addForm.contactPerson" auto-complete="off" style="width:220px"></el-input>
         </el-form-item>
+        <el-upload
+          class="upload-demo"
+          ref="upload"
+          action="https://jsonplaceholder.typicode.com/posts/"
+          :on-preview="handlePreview"
+          :on-remove="handleRemove"
+          :file-list="fileList"
+          :auto-upload="false"
+        >
+          <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+          <el-button
+            style="margin-left: 10px;"
+            size="small"
+            type="success"
+            @click="submitUpload"
+          >上传到服务器</el-button>
+        </el-upload>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click.native="addFormVisible = false">取消</el-button>
@@ -127,33 +144,37 @@ import { write } from "fs";
 export default {
   data() {
     return {
-            pickerOptions: {
-          shortcuts: [{
-            text: '最近一周',
+      pickerOptions: {
+        shortcuts: [
+          {
+            text: "最近一周",
             onClick(picker) {
               const end = new Date();
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-              picker.$emit('pick', [start, end]);
+              picker.$emit("pick", [start, end]);
             }
-          }, {
-            text: '最近一个月',
+          },
+          {
+            text: "最近一个月",
             onClick(picker) {
               const end = new Date();
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-              picker.$emit('pick', [start, end]);
+              picker.$emit("pick", [start, end]);
             }
-          }, {
-            text: '最近三个月',
+          },
+          {
+            text: "最近三个月",
             onClick(picker) {
               const end = new Date();
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-              picker.$emit('pick', [start, end]);
+              picker.$emit("pick", [start, end]);
             }
-          }]
-        },
+          }
+        ]
+      },
       filters: {
         id: "",
         projectName: "",
@@ -182,7 +203,7 @@ export default {
       },
       //编辑界面数据
       editForm: {
-        orderId:'',
+        orderId: "",
         id: "",
         projectName: "",
         status: "",
@@ -196,13 +217,12 @@ export default {
       addLoading: false,
       addFormRules: {
         orderId: [
-          { required: true, message: "请输入订单编号", trigger: "blur" },
-          
+          { required: true, message: "请输入订单编号", trigger: "blur" }
         ]
       },
       //编辑界面数据
       addForm: {
-        orderId:'',
+        orderId: "",
         id: "",
         projectName: "",
         status: "",
