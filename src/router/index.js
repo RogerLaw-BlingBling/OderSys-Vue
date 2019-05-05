@@ -129,16 +129,16 @@ router.beforeEach((to, from, next)=>{
   // else{
   //   next();
   // }
-  if(to.meta.requrieAuth){
-    if(sessionStorage.getItem('username')){
-      next();
-    } else {
-      message.warning('请先登录');
-      router.push({name: 'Login'});
-    }
-  } else{
-    next();
-  }
-  
+  // if(to.meta.requrieAuth){
+  //   if(sessionStorage.getItem('username')){
+  //     next();
+  //   } else {
+  //     message.warning('请先登录');
+  //     router.push({name: 'Login'});
+  //   }
+  // } else{
+  //   next();
+  // }
+  next();
 })
 export default router
