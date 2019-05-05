@@ -18,6 +18,9 @@
               <el-form-item>
                 <el-button type="primary" @click="onSubmit">查询</el-button>
               </el-form-item>
+              <el-form-item>
+                <el-button type="primary" @click="toAddOrder">新增</el-button>
+              </el-form-item>
             </el-form>
           </el-col>
         </div>
@@ -43,10 +46,10 @@ export default {
   data() {
     return {
       order: {
-        orderId: '',
-        status: '',
+        orderId: "",
+        status: ""
       },
-      
+
       orderTable: [
         {
           orderId: "1",
@@ -60,7 +63,10 @@ export default {
   },
   methods: {
     getOrders() {},
-    onSubmit: function(){}
+    onSubmit: function() {},
+    toAddOrder() {
+      this.$router.push({ name: "AddOrder" });
+    }
   }
 };
 </script>

@@ -34,25 +34,25 @@ export default {
   },
   methods: {
     submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-            this.$axios({
-              method: 'post',
-              url: '/auth?login',
-              data: {
-                username: this.loginForm.username,
-                password: this.loginForm.password
-              }
-            }).then((res) => {
-              this.$router.push({ name: 'Main' })
-            }).catch (err=>{
-              alert('请验证用户名或密码!')
-            }) 
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      })
+      // this.$refs[formName].validate((valid) => {
+      //   if (valid) {
+      //       this.$axios({
+      //         method: 'post',
+      //         url: '/auth?login',
+      //         data: {
+      //           username: this.loginForm.username,
+      //           password: this.loginForm.password
+      //         }
+      //       }).then((res) => {
+      //         this.$router.push({ name: 'Main' })
+      //       }).catch (err=>{
+      //         alert('请验证用户名或密码!')
+      //       }) 
+      //   } else {
+      //     console.log('error submit!!')
+      //     return false
+      //   }
+      // })
     },
     resetForm(formName) {
       this.$refs[formName].resetFields()

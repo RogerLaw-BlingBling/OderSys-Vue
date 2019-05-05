@@ -6,7 +6,7 @@ import * as types from '../store/types'
 import Login from '@/components/views/login/login.vue'
 import Main from '@/components/views/main/main.vue'
 import ProceedingProject from '@/components/views/project/proceedingProject.vue'
-import OrderList from '@/components/views/order/oderList.vue'
+import OrderList from '@/components/views/order/orderList.vue'
 import AddOrder from '@/components/views/order/addOrder.vue'
 import OrderDescription from '@/components/views/order/orderDescription.vue'
 import ContractList from '@/components/views/contractList/contractList.vue'
@@ -141,5 +141,4 @@ router.beforeEach((to, from, next)=>{
   }
   
 })
-
 export default router

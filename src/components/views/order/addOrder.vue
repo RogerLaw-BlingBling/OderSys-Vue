@@ -3,13 +3,13 @@
     <div class="orderForm">
       <el-form ref="orderForm" :model="orderForm">
         <el-row :gutter="20">
-          <el-col :span="6">
+          <!-- <el-col :span="6">
             <div class="grid-content bg-purple">
               <el-form-item>
                 <el-input v-model="orderForm.name" placeholder="订单编号"></el-input>
               </el-form-item>
             </div>
-          </el-col>
+          </el-col> -->
           <el-col :span="6">
             <div class="grid-content bg-purple">
               <el-form-item>
@@ -190,21 +190,21 @@ export default {
 .el-col {
   border-radius: 4px;
 }
-.bg-purple-dark {
-  background: #99a9bf;
-}
-.bg-purple {
-  background: #d3dce6;
-}
-.bg-purple-light {
-  background: #e5e9f2;
-}
+// .bg-purple-dark {
+//   background: #99a9bf;
+// }
+// .bg-purple {
+//   background: #d3dce6;
+// }
+// .bg-purple-light {
+//   background: #e5e9f2;
+// }
 .grid-content {
   border-radius: 4px;
   min-height: 36px;
 }
-.row-bg {
-  padding: 10px 0;
-  background-color: #f9fafc;
-}
+// .row-bg {
+//   padding: 10px 0;
+//   background-color: #f9fafc;
+// }
 </style>
