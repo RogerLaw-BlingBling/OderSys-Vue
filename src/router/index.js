@@ -5,7 +5,7 @@ import * as types from '../store/types'
 import Login from '@/components/views/login/login.vue'
 import Main from '@/components/views/main/main.vue'
 import ProceedingProject from '@/components/views/project/proceedingProject.vue'
-import OrderList from '@/components/views/order/oderList.vue'
+import OrderList from '@/components/views/order/orderList.vue'
 import AddOrder from '@/components/views/order/addOrder.vue'
 import OrderDescription from '@/components/views/order/orderDescription.vue'
 import ContractList from '@/components/views/contractList/contractList.vue'
@@ -109,25 +109,25 @@ let router= new Router({
   ]
 })
 // 页面刷新时，重新赋值token
-if (window.localStorage.getItem('token')) {
-  store.commit(types.LOGIN, window.localStorage.getItem('token'))
-}
+// if (window.localStorage.getItem('token')) {
+//   store.commit(types.LOGIN, window.localStorage.getItem('token'))
+// }
 
-router.beforeEach((to, from, next)=>{
-  if(to.meta.requrieAuth){
-    if(store.state.token){
-      next();
-    }
-    else{
-      next({
-        path: '/',
-        // query:{redirect:to.fullPath}
-      })
-    }
-  }
-  else{
-    next();
-  }
-})
+// router.beforeEach((to, from, next)=>{
+//   if(to.meta.requrieAuth){
+//     if(store.state.token){
+//       next();
+//     }
+//     else{
+//       next({
+//         path: '/',
+//         // query:{redirect:to.fullPath}
+//       })
+//     }
+//   }
+//   else{
+//     next();
+//   }
+// })
 
 export default router

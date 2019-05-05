@@ -32,9 +32,9 @@ export default {
     toOrderList () {
       this.$router.push({ name: 'OrderList' })
     },
-    toAddOrder () {
-      this.$router.push({ name: 'AddOrder' })
-    },
+    // toAddOrder () {
+    //   this.$router.push({ name: 'AddOrder' })
+    // },
     toOrderDescription () {
       this.$router.push({ name: 'OrderDescription' })
     },
