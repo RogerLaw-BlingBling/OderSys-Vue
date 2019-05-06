@@ -59,8 +59,8 @@
         <el-table-column prop="bankName" label="开户银行" width="120"></el-table-column>
         <el-table-column prop="bankAccountNum" label="银行卡号" width="200"></el-table-column>
         <el-table-column fixed="right" label="操作" width="100">
-          <template>
-            <el-button @click="editClick()" type="text" size="small">编辑</el-button>
+          <template slot-scope="scope">
+            <el-button @click="editClick(scope.row)" type="text" size="small">编辑</el-button>
             <el-button type="text" size="small">删除</el-button>
           </template>
         </el-table-column>
@@ -79,26 +79,30 @@
     <!-- 编辑页面 -->
     <el-dialog title="客户信息编辑" :visible.sync="editFormVisible" :close-on-click-modal="false">
       <el-form>
-        <el-form-item label="工程名" prop="projectName">
-          <el-input v-model="editForm.projectName" auto-complete="off"></el-input>
+        <el-form-item label="客户名" label-width="100">
+          <el-input v-model="editForm.customerName" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="工程名" prop="projectName">
-          <el-input v-model="editForm.projectName" auto-complete="off"></el-input>
+        <el-form-item label="客户地址" label-width="100">
+          <el-input v-model="editForm.address" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="工程名" prop="projectName">
-          <el-input v-model="editForm.projectName" auto-complete="off"></el-input>
+        <el-form-item label="联系人">
+          <el-input v-model="editForm.contactPerson" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="工程名" prop="projectName">
-          <el-input v-model="editForm.projectName" auto-complete="off"></el-input>
+        <el-form-item label="联系方式">
+          <el-input v-model="editForm.mobilePhone" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="工程名" prop="projectName">
-          <el-input v-model="editForm.projectName" auto-complete="off"></el-input>
+        <el-form-item label="邮箱">
+          <el-input v-model="editForm.email" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="工程名" prop="projectName">
-          <el-input v-model="editForm.projectName" auto-complete="off"></el-input>
+        <el-form-item label="开户银行">
+          <el-input v-model="editForm.bankName" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="工程名" prop="projectName">
-          <el-input v-model="editForm.projectName" auto-complete="off"></el-input>
+        <el-form-item label="银行卡号">
+          <el-input v-model="editForm.bankAccountNum" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="submitEdit">提交</el-button>
+          <el-button>重置</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -115,22 +119,64 @@ export default {
       editFormVisible: false,
       currentPage: 1, //当前页
       pageSize: 10, //显示条数
-      total: 0 //总数
+      total: 0, //总数
+      editForm: {
+        id: '',
+        customerName: '',
+        address: '',
+        contactPerson: '',
+        mobilePhone: '',
+        email: '',
+        bankName: '',
+        bankAccountNum: ''
+      }
     };
   },
   methods: {
     onSubmit: function() {},
-    editClick: function() {
-      var row;
-      this.editFormVisible = true;
-      this.editForm = Object.assign({}, row);
+    editClick: function(row) {
+      var _this = this;
+      _this.editForm = {
+        id: row.id,
+        customerName: row.customerName,
+        address: row.address,
+        contactPerson: row.contactPerson,
+        mobilePhone: row.mobilePhone,
+        email: row.email,
+        bankName: row.bankName,
+        backAccountNum: row.bankAccountNum
+      }
+      // _this.editForm.id = row.id;
+      console.log(_this.editForm)
+      _this.editFormVisible = true;
+    },
+    submitEdit: function submitEdit(){
+      var _this = this;
+      _this.$axios({
+        method: 'post',
+        url: '/customer/' + _this.editForm.id,
+        data: _this.editForm
+      }).then(res=>{
+        _this.editFormVisible = false;
+        _this.loadData();
+      }).catch(err=>{
+
+      })
     },
     loadData: function() {
       var _this = this;
+      var formData = new FormData();
+      formData.append('page', _this.currentPage);
+      formData.append('pageSize', _this.pageSize);
+      var param = {
+        page: _this.currentPage,
+        pageSize: _this.pageSize
+      }
       _this
         .$axios({
           method: "get",
-          url: "/customer" //如果查询方法会传页数、显示条数
+          url: "/customer", //如果查询方法会传页数、显示条数
+          // data: formData
         })
         .then(res => {
           //res是返回的数据

@@ -14,6 +14,6 @@
 
 <script src='./welcome.js'></script>
 
-<style lang="scss" scoped>
-@import url('/welcome.scss');
+<style lang="less" scoped>
+// @import url('/welcome.scss');
 </style>
