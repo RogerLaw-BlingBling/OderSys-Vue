@@ -5,12 +5,13 @@ import store from '../store/store'
 import * as types from '../store/types'
 import Login from '@/components/views/login/login.vue'
 import Main from '@/components/views/main/main.vue'
+import Welcome from '@/components/views/welcome/welcome.vue'
 import ProceedingProject from '@/components/views/project/proceedingProject.vue'
 import OrderList from '@/components/views/order/orderList.vue'
 import AddOrder from '@/components/views/order/addOrder.vue'
 import OrderDescription from '@/components/views/order/orderDescription.vue'
-import ContractList from '@/components/views/contractList/contractList.vue'
-import AddContract from '@/components/views/addContract/addContract.vue'
+import CustomerList from '@/components/views/customer/customerList.vue'
+// import AddCustomer from '@/components/views/addCustomer/addCustomer.vue'
 import AccountingDetail from '@/components/views/finance/accountingDetail.vue'
 import BusinessStatics from '@/components/views/businessStatistics/businessStatistics.vue'
 import DemandInfo from '@/components/views/project/demandInfo.vue'
@@ -28,10 +29,19 @@ let router= new Router({
       path: '/main',
       name: 'Main',
       component: Main,
+      redirect: '/welcome',//转发路由
       meta:{
         requrieAuth: true
       },
       children: [
+         {//欢迎页
+          path: '/welcome',
+          name: 'Welcome',
+          component: Welcome,
+          meta:{
+            requrieAuth: true
+          }
+        },
         {
           path: 'proceedingProject',
           name: 'ProceedingProject',
@@ -73,21 +83,21 @@ let router= new Router({
           }
         },
         {
-          path: 'contractList',
-          name: 'ContractList',
-          component: ContractList,
+          path: 'customerList',
+          name: 'CustomerList',
+          component: CustomerList,
           meta:{
             requrieAuth: true
           }
         },
-        {
-          path: 'addContract',
-          name: 'AddContract',
-          component: AddContract,
-          meta:{
-            requrieAuth: true
-          }
-        },
+        // {
+        //   path: 'addCustomer',
+        //   name: 'AddCustomer',
+        //   component: AddCustomer,
+        //   meta:{
+        //     requrieAuth: true
+        //   }
+        // },
         {
           path: 'accountingDetail',
           name: 'AccountingDetail',

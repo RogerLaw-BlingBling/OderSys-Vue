@@ -67,16 +67,13 @@
                 <el-menu-item index="demandInfo" @click="toDemandInfo">需求信息</el-menu-item>
               </el-submenu>
              
-              <!-- <el-submenu index="3">
+              <el-submenu index="3">
                 <template slot="title">
                   <i class="el-icon-plus"></i>
-                  &nbsp;&nbsp;合同管理
+                  &nbsp;&nbsp;客户管理
                 </template>
-                <el-menu-item index="contractList" @click="toContractList">合同列表</el-menu-item>
-                <el-menu-item index="addContract" @click="toAddContract">添加合同</el-menu-item> 
+                <el-menu-item index="userList" @click="toCustomerList">客户列表</el-menu-item>
               </el-submenu>
-              -->
-              
               <el-submenu index="4">
                 <template slot="title">
                   <i class="el-icon-star-on"></i>

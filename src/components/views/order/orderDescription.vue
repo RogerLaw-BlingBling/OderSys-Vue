@@ -53,9 +53,9 @@
     <!-- 新增界面 -->
     <el-dialog title="新增" :visible.sync="addFormVisible" :close-on-click-modal="false">
       <el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
-        <el-form-item label="订单编号" prop="orderId">
+        <!-- <el-form-item label="订单编号" prop="orderId">
           <el-input v-model="addForm.projectName" auto-complete="off"></el-input>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="工程名" prop="projectName">
           <el-input v-model="addForm.projectName" auto-complete="off"></el-input>
         </el-form-item>

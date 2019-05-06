@@ -38,12 +38,12 @@ export default {
     toOrderDescription () {
       this.$router.push({ name: 'OrderDescription' })
     },
-    toContractList () {
-      this.$router.push({ name: 'ContractList' })
+    toCustomerList () {
+      this.$router.push({ name: 'CustomerList' })
     },
-    toAddContract () {
-      this.$router.push({ name: 'AddContract' })
-    },
+    // toAddContract () {
+    //   this.$router.push({ name: 'AddContract' })
+    // },
     toAccountingDetail () {
       this.$router.push({ name: 'AccountingDetail' })
     },

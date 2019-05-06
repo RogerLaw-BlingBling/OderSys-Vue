@@ -1,93 +1,53 @@
 <template>
   <div class="workstation">
     <div class="orderForm">
-      <el-form ref="orderForm" :model="orderForm">
+      <el-form :model="orderForm">
         <el-row :gutter="20">
-          <!-- <el-col :span="6">
-            <div class="grid-content bg-purple">
-              <el-form-item>
-                <el-input v-model="orderForm.name" placeholder="订单编号"></el-input>
-              </el-form-item>
-            </div>
-          </el-col> -->
           <el-col :span="6">
             <div class="grid-content bg-purple">
               <el-form-item>
-                <el-input v-model="orderForm.name" placeholder="订单名称"></el-input>
+                <el-input v-model="orderForm.title" placeholder="订单名称"></el-input>
               </el-form-item>
             </div>
           </el-col>
           <el-col :span="6">
             <div class="grid-content bg-purple">
               <el-form-item>
-                <el-input v-model="orderForm.name" placeholder="客户名称"></el-input>
+                <el-input v-model="orderForm.customerId" placeholder="客户编号"></el-input>
               </el-form-item>
             </div>
-          </el-col>
-          <el-col :span="6">
-            <div class="grid-content bg-purple"></div>
           </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-col :span="6">
             <div class="grid-content bg-purple">
               <el-form-item>
-                <el-input v-model="orderForm.name" placeholder="客户地址"></el-input>
+                <el-input v-model="orderForm.orderStatus" placeholder="订单状态" value="CREATED"></el-input>
               </el-form-item>
             </div>
           </el-col>
           <el-col :span="6">
             <div class="grid-content bg-purple">
               <el-form-item>
-                <el-input v-model="orderForm.name" placeholder="邮政编码"></el-input>
+                <el-input v-model="orderForm.handlerName" placeholder="交接人"></el-input>
               </el-form-item>
             </div>
           </el-col>
           <el-col :span="6">
-            <div class="grid-content bg-purple"></div>
-          </el-col>
-          <el-col :span="6">
-            <div class="grid-content bg-purple"></div>
+            <div class="grid-content bg-purple">
+              <el-form-item>
+                <!-- <el-input v-model="orderForm.name" placeholder="邮政编码"></el-input> -->
+              </el-form-item>
+            </div>
           </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-col :span="6">
             <div class="grid-content bg-purple">
               <el-form-item>
-                <el-input v-model="orderForm.name" placeholder="合同金额"></el-input>
+                <el-input v-model="orderForm.orderTotal" placeholder="合同金额"></el-input>
               </el-form-item>
             </div>
-          </el-col>
-          <el-col :span="6">
-            <div class="grid-content bg-purple"></div>
-          </el-col>
-          <el-col :span="6">
-            <div class="grid-content bg-purple"></div>
-          </el-col>
-          <el-col :span="6">
-            <div class="grid-content bg-purple"></div>
-          </el-col>
-        </el-row>
-        <el-row :gutter="20">
-          <el-col :span="6">
-            <div class="grid-content bg-purple">
-              <el-form-item>
-                <el-input v-model="orderForm.name" placeholder="联系人"></el-input>
-              </el-form-item>
-            </div>
-          </el-col>
-          <el-col :span="6">
-            <div class="grid-content bg-purple">
-              <el-form-item>
-                <el-input v-model="orderForm.name" placeholder="联系电话"></el-input>
-              </el-form-item>
-            </div>
-          </el-col>
-          <el-col :span="6">
-            <div class="grid-content bg-purple"></div>
-          </el-col>
-          <el-col :span="6">
-            <div class="grid-content bg-purple"></div>
           </el-col>
         </el-row>
         <el-row :gutter="20">
@@ -97,7 +57,7 @@
                 <el-date-picker
                   type="date"
                   placeholder="订单起始时间"
-                  v-model="orderForm.date2"
+                  v-model="orderForm.createTime"
                   style="width: 100%;"
                 ></el-date-picker>
               </el-form-item>
@@ -108,45 +68,12 @@
               <el-form-item>
                 <el-date-picker
                   type="date"
-                  placeholder="订单预计结束时间"
-                  v-model="orderForm.date1"
+                  placeholder="订单预计付款时间"
+                  v-model="orderForm.paymentTime"
                   style="width: 100%;"
                 ></el-date-picker>
               </el-form-item>
             </div>
-          </el-col>
-          <el-col :span="6">
-            <div class="grid-content bg-purple"></div>
-          </el-col>
-          <el-col :span="6">
-            <div class="grid-content bg-purple"></div>
-          </el-col>
-        </el-row>
-        <el-row :gutter="20">
-          <el-col :span="6">
-            <div class="grid-content bg-purple">
-              <el-form-item>
-                <el-input v-model="orderForm.name" placeholder="交接人"></el-input>
-              </el-form-item>
-            </div>
-          </el-col>
-          <el-col :span="6">
-            <div class="grid-content bg-purple">
-              <el-form-item>
-                <el-date-picker
-                  type="date"
-                  placeholder="订单录入时间"
-                  v-model="orderForm.date2"
-                  style="width: 100%;"
-                ></el-date-picker>
-              </el-form-item>
-            </div>
-          </el-col>
-          <el-col :span="6">
-            <div class="grid-content bg-purple"></div>
-          </el-col>
-          <el-col :span="6">
-            <div class="grid-content bg-purple"></div>
           </el-col>
         </el-row>
         <el-form-item label="订单备注">
@@ -162,20 +89,32 @@
 </template>
 
 <script>
+import axios from "axios";
+import { truncate, rename } from "fs";
 export default {
-  data(){
-    return{
+  data() {
+    return {
       orderForm: {
-        name: '',
-        date1: '',
-        date2: '',
-        desc:'',
+        customerId: '',
+        orderStatus: '',
+        title: '',
+        paymentTimes: '',
+        handlerName: '',
+        createTime: '',
+        comments: '',
+        orderTotal: ''
       }
-    }
+    };
   },
-  
+
   methods: {
-    onSubmit(orderForm) {}
+    onSubmit(orderForm) {
+      var _this=this;
+      axios.post('order',_this.orderForm).then(res=>{
+        console.log(res);
+        _this.loading=false;
+      })
+    }
   }
 };
 </script>

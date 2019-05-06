@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>这是合同列表页面</h1>
+        <h1>这是客户列表页面</h1>
     </div>
 </template>
 
