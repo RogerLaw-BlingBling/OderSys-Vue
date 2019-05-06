@@ -97,7 +97,7 @@
                 <el-date-picker
                   type="date"
                   placeholder="订单起始时间"
-                  v-model="orderForm.date1"
+                  v-model="orderForm.date2"
                   style="width: 100%;"
                 ></el-date-picker>
               </el-form-item>
@@ -109,7 +109,7 @@
                 <el-date-picker
                   type="date"
                   placeholder="订单预计结束时间"
-                  v-model="orderForm.date2"
+                  v-model="orderForm.date1"
                   style="width: 100%;"
                 ></el-date-picker>
               </el-form-item>
@@ -150,7 +150,7 @@
           </el-col>
         </el-row>
         <el-form-item label="订单备注">
-          <el-input type="textarea" v-model="orderForm.desc"></el-input>
+          <el-input type="textarea" v-model="orderForm.desc" style="width:628px"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit('orderForm')">立即创建</el-button>
