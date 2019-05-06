@@ -1,5 +1,4 @@
 <template>
-
     <div class="filelist">
       <template>
         <el-table :data="tableData" style="width: 100%">
@@ -10,7 +9,6 @@
         </el-table>
       </template>
     </div>
-  </div>
 </template>
 
 <script>

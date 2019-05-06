@@ -115,8 +115,6 @@ export default {
       pageSize: 10, //显示条数
       total: 0, //总数
       handleClose: true,
-      json: [],
-      jsonKey: []
     };
   },
   methods: {
