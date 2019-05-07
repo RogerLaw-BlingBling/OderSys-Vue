@@ -156,12 +156,7 @@ export default {
         duration: "",
         contactPerson: ""
       },
-      projects: [
-        {
-          projectname: "不知道啥玩意",
-          status: "进行中"
-        }
-      ],
+      projects: [],
       total: 0,
       listLoading: false,
       sels: [], //列表选中列
