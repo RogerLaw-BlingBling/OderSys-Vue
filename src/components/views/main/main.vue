@@ -66,7 +66,7 @@
                   &nbsp;&nbsp;项目管理
                 </template>
                 <el-menu-item index="proceeding" @click="toProceedingProject">进行中的项目</el-menu-item>
-                <el-menu-item index="projectDesc" @click="toOrderDescription">项目详情</el-menu-item>
+                <el-menu-item index="projectDesc" @click="toProjectList">项目详情</el-menu-item>
                 <el-menu-item index="demandInfo" @click="toDemandInfo">需求信息</el-menu-item>
               </el-submenu>
               <el-submenu index="4">

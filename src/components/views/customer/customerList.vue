@@ -122,9 +122,11 @@ export default {
     return {
       customerTable: [],
       editFormVisible: false,
+
       currentPage: 1, //当前页
       pageSize: 10, //显示条数
       total: 0, //总数
+
       //提交客户信息表单
       customerForm:{
         customerName: '',
@@ -186,6 +188,7 @@ export default {
       console.log(_this.editForm)
       _this.editFormVisible = true;
     },
+
     submitEdit: function submitEdit(){
       var _this = this;
       _this.$axios({
@@ -199,41 +202,44 @@ export default {
 
       })
     },
-    loadData: function() {
-      var _this = this;
-      var formData = new FormData();
-      formData.append('page', _this.currentPage);
-      formData.append('pageSize', _this.pageSize);
-      var param = {
-        page: _this.currentPage,
-        pageSize: _this.pageSize
-      }
-      _this
-        .$axios({
-          method: "get",
-          url: "/customer", //如果查询方法会传页数、显示条数
-          // data: formData
-        })
+
+    loadData() {
+    //   var _this = this;
+    //   var formData = new FormData();
+    //   formData.append('page', _this.currentPage);
+    //   formData.append('pageSize', _this.pageSize);
+
+    const page=this.currentPage;
+    const pageSize = this.pageSize;
+
+    //   var param = {
+    //     page: _this.currentPage,
+    //     pageSize: _this.pageSize
+    //   }
+
+      axios.get(`/customer?page=${page - 1}&size=${pageSize}`)
         .then(res => {
           //res是返回的数据
           console.log(res); //打印一下，你就知道可以拿到什么
-          _this.customerTable = res.data.content; //table赋值,el-table自动遍历,你只要设置prop属性
-          _this.total = res.data.totalElements; //table总条数
+          this.customerTable = res.data.content; //table赋值,el-table自动遍历,你只要设置prop属性
+          this.total = res.data.totalElements; //table总条数
+          console.log(this.total);
         })
         .catch(err => {});
     },
-    handleSizeChange: function(val) {
+     handleSizeChange: function(val) {
       //改变table显示条数回调函数
       this.pageSize = val; //丢进去查询里，重新查询
       console.log(val);
-      // this.loadData();
+      this.loadData();
     },
     handleCurrentChange: function(val) {
       //改变table当前页回调函数
       this.currentPage = val; //丢进去查询里，重新查询
       console.log(val);
-      // this.loadData();
+      this.loadData();
     }
+   
   },
 
   mounted() {

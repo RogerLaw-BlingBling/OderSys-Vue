@@ -9,7 +9,7 @@ import Welcome from '@/components/views/welcome/welcome.vue'
 import ProceedingProject from '@/components/views/project/proceedingProject.vue'
 import OrderList from '@/components/views/order/orderList.vue'
 import AddOrder from '@/components/views/order/addOrder.vue'
-import OrderDescription from '@/components/views/order/orderDescription.vue'
+import ProjectList from '@/components/views/order/projectList.vue'
 import CustomerList from '@/components/views/customer/customerList.vue'
 // import AddCustomer from '@/components/views/addCustomer/addCustomer.vue'
 import AccountingDetail from '@/components/views/finance/accountingDetail.vue'
@@ -75,9 +75,9 @@ let router= new Router({
           }
         },
         {
-          path: 'orderDescription',
-          name: 'OrderDescription',
-          component: OrderDescription,
+          path: 'projectList',
+          name: 'ProjectList',
+          component: ProjectList,
           meta:{
             requrieAuth: true
           }
