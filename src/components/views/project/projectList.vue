@@ -10,7 +10,7 @@
           <el-button type="primary" @click="onSearch()">查询</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="addProject()">新增</el-button>
+          <el-button type="primary" @click="onAddProjectButton()">新增</el-button>
         </el-form-item>
       </el-form>
     </el-col>
@@ -59,12 +59,18 @@
         <el-form-item label="工程名" prop="projectName">
           <el-input v-model="addForm.projectName" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="工程状态">
-          <el-radio-group v-model="addForm.status">
-            <el-radio class="radio" :label="1">进行中</el-radio>
-            <el-radio class="radio" :label="-1">未开始</el-radio>
-            <el-radio class="radio" :label="0">已交付</el-radio>
-          </el-radio-group>
+        <el-form-item label="订单列表">
+          <el-select v-model="selectedOrder" value-key="id" filterable placeholder="请选择" style="width:360px">
+            <el-option
+              v-for="item in options"
+              :key="item.id"
+              :label="item.title"
+              :value="item"
+            >
+             <!-- <span style="float: left">{{ item.title }}</span> -->
+      <!-- <span style="float: right; color: #8492a6; font-size: 13px">{{ item.value }}</span> -->
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="起始时间">
           <div class="block">
@@ -100,7 +106,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click.native="addFormVisible = false">取消</el-button>
-        <el-button type="primary" @click.native="addSubmit" :loading="addLoading">提交</el-button>
+        <el-button type="primary" @click.native="onSubmitProject()" :loading="addLoading">提交</el-button>
       </div>
     </el-dialog>
 
@@ -138,8 +144,6 @@
 
 <script>
 import axios from "axios";
-// import { write } from "fs";
-// import { url } from 'inspector';
 export default {
   data() {
     return {
@@ -152,6 +156,10 @@ export default {
       searchForm: {
         projectName: ""
       },
+
+      //订单列表
+      options: [],
+      selectedOrder: {},
 
       total: 0,
       listLoading: false,
@@ -167,7 +175,6 @@ export default {
       //编辑界面数据
       editForm: {
         orderId: "",
-        id: "",
         projectName: "",
         status: "",
         beginTime: "",
@@ -187,14 +194,13 @@ export default {
 
       //编辑界面数据
       addForm: {
-        orderId: "",
-        id: "",
+        // orderId: "",
         projectName: "",
         status: "",
         beginTime: "",
         endTime: "",
         duration: "",
-        contactPerson: "",
+        // contactPerson: "",
         filelist: ""
       }
     };
@@ -205,7 +211,6 @@ export default {
     loadData() {
       const page = this.currentPage;
       const pageSize = this.pageSize;
-
       this.$axios({
         method: "get",
         url: `project?page=${page - 1}&$size=${pageSize}`
@@ -232,10 +237,15 @@ export default {
         .catch(err => {});
     },
 
-    //添加工程名
-    addProject() {
+    //添加工程按钮
+    onAddProjectButton() {
       this.addFormVisible = true;
-      this.addForm = Object.assign({}, row);
+      // this.addForm = Object.assign({}, row);
+      axios.get('/order').then((res)=>{
+        this.options=res.data.content;
+        // this.addForm.orderId=res.data.orderId;
+        console.log(orderId)
+      })
     },
     //删除
     handleDel: function(index, row) {},
@@ -258,9 +268,18 @@ export default {
       this.loadData();
     },
     //编辑提交
-    editSubmit: function() {},
+    editSubmit() {
+
+    },
     //新增
-    addSubmit: function() {},
+    onSubmitProject() {
+      // const orderId = this.selectedOrder.id;
+      const orderId=this.selectedOrder.orderId;
+      axios.post(`/project?orderId=${orderId}`,this.addForm).then(res=>{
+      this.addFormVisible = false;
+      }).catch()
+    },
+
     selsChange: function(sels) {
       this.sels = sels;
     }, //批量删除

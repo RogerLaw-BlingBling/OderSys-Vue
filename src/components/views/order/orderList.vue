@@ -6,7 +6,7 @@
           <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
             <el-form :inline="true" :model="searchForm">
               <el-form-item>
-                <el-input v-model="order.orderId" placeholder="订单编号" style="width:230px"></el-input>
+                <el-input v-model="order.title" placeholder="订单标题" style="width:230px"></el-input>
               </el-form-item>
               <el-form-item prop="status">
                 <el-select v-model="order.status" style="width:110px">
