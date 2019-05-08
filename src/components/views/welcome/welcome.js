@@ -3,7 +3,8 @@ export default{
         return {
             currentDate: '',
             currentTime: '',
-            currentDay: ''
+            currentDay: '',
+            value: new Date()
         }
     },
     mounted() {

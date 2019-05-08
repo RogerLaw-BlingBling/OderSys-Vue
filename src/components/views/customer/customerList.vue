@@ -189,7 +189,7 @@ export default {
       _this.editFormVisible = true;
     },
 
-    submitEdit: function submitEdit(){
+    submitEdit(){
       var _this = this;
       _this.$axios({
         method: 'post',
@@ -242,7 +242,7 @@ export default {
    
   },
 
-  mounted() {
+  mounted(){
     //页面加载自动执行，你可以放初始化的函数在这里
     this.loadData();
   }

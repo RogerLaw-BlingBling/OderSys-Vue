@@ -1,36 +1,37 @@
 <template>
   <section>
     <!-- 工具条 -->
-    <el-col :span="24" class="toobar" style="padding-buttom: 0px;">
-      <el-form :inline="true" :model="filters">
+    <el-col :model="searchForm" :span="24" class="toobar" style="padding-buttom: 0px;">
+      <el-form :inline="true">
         <el-form-item>
-          <el-input v-model="filters.projectName" placeholder="项目名" style="width:300px"></el-input>
+          <el-input v-model="searchForm.projectName" placeholder="项目名" style="width:300px"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" v-on:click="getProjects">查询</el-button>
+          <el-button type="primary" @click="onSearch()">查询</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="addProject">新增</el-button>
+          <el-button type="primary" @click="addProject()">新增</el-button>
         </el-form-item>
       </el-form>
     </el-col>
 
     <!-- 列表 -->
     <el-table
-      :data="projects"
+      :data="projectTable"
       highlight-current-row
       v-loading="listLoading"
       @selection-change="selsChange"
-      style="width: 100%;"
+      style="width: 75%;"
     >
       <!-- <el-table-column type="selection" width="55"></el-table-column> -->
       <el-table-column type="index" width="60"></el-table-column>
-      <el-table-column prop="projectname" label="项目名" width="120" sortable></el-table-column>
-      <el-table-column prop="status" label="工程状态" width="100" sortable></el-table-column>
-      <el-table-column prop="begin-time" label="起始时间" width="100" sortable></el-table-column>
-      <el-table-column prop="end-time" label="结束时间" width="100" sortable></el-table-column>
-      <el-table-column prop="duration" label="预计工期" width="100" sortable></el-table-column>
-      <el-table-column prop="handlername" label="交接人" min-width="180" sortable></el-table-column>
+      <el-table-column prop="projectName" label="项目名" width="230" sortable></el-table-column>
+      <el-table-column label="工程状态" width="150" sortable>
+        <template slot-scope="scope">{{scope.row.projectStatus | statusType}}</template>
+      </el-table-column>
+      <el-table-column prop="beginTime" label="起始时间" width="150" sortable></el-table-column>
+      <el-table-column prop="endTime" label="结束时间" width="150" sortable></el-table-column>
+      <el-table-column prop="duration" label="预计工期" width="170" sortable></el-table-column>
       <el-table-column label="操作" width="150">
         <template slot-scope="scope">
           <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
@@ -38,24 +39,23 @@
         </template>
       </el-table-column>
     </el-table>
+    <!--分页-->
+    <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page.sync="currentPage"
+      :page-sizes="[10, 20, 30, 40]"
+      :page-size="pageSize"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="total"
+    ></el-pagination>
 
-    <!--工具条-->
-    <el-col :span="24" class="toolbar">
-      <!-- <el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button> -->
-      <el-pagination
-        layout="prev, pager, next"
-        @current-change="handleCurrentChange"
-        :page-size="20"
-        :total="total"
-        style="float:right;"
-      ></el-pagination>
-    </el-col>
     <!-- 新增界面 -->
     <el-dialog title="新增" :visible.sync="addFormVisible" :close-on-click-modal="false">
       <el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
         <!-- <el-form-item label="订单编号" prop="orderId">
           <el-input v-model="addForm.projectName" auto-complete="off"></el-input>
-        </el-form-item> -->
+        </el-form-item>-->
         <el-form-item label="工程名" prop="projectName">
           <el-input v-model="addForm.projectName" auto-complete="off"></el-input>
         </el-form-item>
@@ -70,7 +70,7 @@
           <div class="block">
             <!-- <span class="demonstration">起始日期时刻为 12:00:00</span> -->
             <el-date-picker
-              v-model="duration"
+              v-model="addForm.beginTime"
               type="datetimerange"
               start-placeholder="开始日期"
               end-placeholder="结束日期"
@@ -81,16 +81,12 @@
         <el-form-item label="预计工期">
           <el-input v-model="addForm.duration" auto-complete="off" style="width:220px"></el-input>
         </el-form-item>
-        <el-form-item label="交接人">
-          <el-input v-model="addForm.contactPerson" auto-complete="off" style="width:220px"></el-input>
-        </el-form-item>
         <el-upload
           class="upload-demo"
           ref="upload"
           action="https://jsonplaceholder.typicode.com/posts/"
-          :on-preview="handlePreview"
           :on-remove="handleRemove"
-          :file-list="fileList"
+          :file-list="addForm.fileList"
           :auto-upload="false"
         >
           <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
@@ -107,6 +103,7 @@
         <el-button type="primary" @click.native="addSubmit" :loading="addLoading">提交</el-button>
       </div>
     </el-dialog>
+
     <!-- 编辑界面 -->
     <el-dialog title="编辑" :visible.sync="editFormVisible" :close-on-click-modal="false">
       <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
@@ -140,23 +137,22 @@
 </template>
 
 <script>
-import { write } from "fs";
+import axios from "axios";
+// import { write } from "fs";
+// import { url } from 'inspector';
 export default {
   data() {
     return {
-      duration:'',
-      fileList:'',
-     
-      filters: {
-        id: "",
-        projectName: "",
-        status: "",
-        beginTime: "",
-        endTime: "",
-        duration: "",
-        contactPerson: ""
+      projectTable: [],
+
+      currentPage: 1, //当前页
+      pageSize: 10, //显示条数
+      total: 0, //总数
+
+      searchForm: {
+        projectName: ""
       },
-      projects: [],
+
       total: 0,
       listLoading: false,
       sels: [], //列表选中列
@@ -176,9 +172,10 @@ export default {
         status: "",
         beginTime: "",
         endTime: "",
-        duration: '',
+        duration: "",
         contactPerson: ""
       },
+
       //新增界面
       addFormVisible: false, //编辑界面是否显示
       addLoading: false,
@@ -187,6 +184,7 @@ export default {
           { required: true, message: "请输入订单编号", trigger: "blur" }
         ]
       },
+
       //编辑界面数据
       addForm: {
         orderId: "",
@@ -196,14 +194,44 @@ export default {
         beginTime: "",
         endTime: "",
         duration: "",
-        contactPerson: ""
+        contactPerson: "",
+        filelist: ""
       }
     };
   },
+
   methods: {
+    //加载页面
+    loadData() {
+      const page = this.currentPage;
+      const pageSize = this.pageSize;
+
+      this.$axios({
+        method: "get",
+        url: `project?page=${page - 1}&$size=${pageSize}`
+      })
+        .then(res => {
+          this.projectTable = res.data.content;
+          this.total = res.data.totalElements;
+        })
+        .catch(err => {});
+    },
     handleCurrentChange(val) {},
+
     //获取工程名称列表
-    getProjects() {},
+    onSearch() {
+      var keyword = this.searchForm.projectName;
+      this.$axios({
+        method: "get",
+        url: `project?keyword=${keyword}`
+      })
+        .then(res => {
+          this.projectTable = res.data.content;
+          this.total = res.data.totalElements;
+        })
+        .catch(err => {});
+    },
+
     //添加工程名
     addProject() {
       this.addFormVisible = true;
@@ -217,7 +245,18 @@ export default {
       this.editForm = Object.assign({}, row);
       // window.alert("点击成功");
     },
-    handlePreview: function(){},
+    handleSizeChange: function(val) {
+      //改变table显示条数回调函数
+      this.pageSize = val; //丢进去查询里，重新查询
+      console.log(val);
+      this.loadData();
+    },
+    handleCurrentChange: function(val) {
+      //改变table当前页回调函数
+      this.currentPage = val; //丢进去查询里，重新查询
+      console.log(val);
+      this.loadData();
+    },
     //编辑提交
     editSubmit: function() {},
     //新增
@@ -225,12 +264,24 @@ export default {
     selsChange: function(sels) {
       this.sels = sels;
     }, //批量删除
-    batchRemove: function() {},
-    handleRemove:function(){},
-    submitUpload:function(){}
+    // batchRemove: function() {},
+    handleRemove: function() {},
+    submitUpload: function() {}
+  },
+  filters: {
+    //过滤器，局部的过滤的函数放这里
+    statusType: function(val) {
+      if (val == "IN_PROGRESS") {
+        return "进行中";
+      } else if (val == "CREATED") {
+        return "未开始";
+      } else val == "FINISHED";
+      return "已结束";
+    }
+  },
+  mounted() {
+    this.loadData();
   }
 };
 </script>
-
-<style lang="less" scoped>
-</style>
+<style lang="less" scoped />;
