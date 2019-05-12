@@ -16,7 +16,7 @@
                 </el-select>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" @click="onSubmit">查询</el-button>
+                <el-button type="primary" @click="onSearchButton">查询</el-button>
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" @click="toAddOrder">新增</el-button>
@@ -121,9 +121,10 @@ export default {
     editOrder: function(row) {
       console.log(row);
       this.editFormVisible = true;
-      this.editForm = Object.assign({}, row);
+      // this.editForm = Object.assign({}, row);
     },
-    onSubmit: function() {
+    onSearchButton() {
+      console.log("fsfsf");
       this.loadData();
     },
     toAddOrder() {

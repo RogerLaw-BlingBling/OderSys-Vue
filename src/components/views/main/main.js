@@ -7,8 +7,9 @@ export default {
     }
   },
   methods: {
+    //注销登录
     logout: function () {
-
+      
     },
     // 折叠导航栏
     collapse: function () {

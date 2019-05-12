@@ -12,9 +12,17 @@
           </el-col>
           <el-col :span="6">
             <div class="grid-content bg-purple">
-              <el-form-item>
+              <!-- <el-form-item>
                 <el-input v-model="orderForm.customerId" placeholder="客户编号"></el-input>
-              </el-form-item>
+              </el-form-item>-->
+              <el-select v-model="value" filterable placeholder="用户名称" style="width:336px">
+                <el-option
+                  v-for="item in options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
             </div>
           </el-col>
         </el-row>
@@ -46,6 +54,13 @@
             <div class="grid-content bg-purple">
               <el-form-item>
                 <el-input v-model="orderForm.orderTotal" placeholder="合同金额"></el-input>
+              </el-form-item>
+            </div>
+          </el-col>
+          <el-col :span="6">
+            <div class="grid-content bg-purple">
+              <el-form-item>
+                <el-input v-model="orderForm.paymentTimes" placeholder="付款次数"></el-input>
               </el-form-item>
             </div>
           </el-col>
@@ -95,25 +110,25 @@ export default {
   data() {
     return {
       orderForm: {
-        customerId: '',
-        orderStatus: '',
-        title: '',
-        paymentTimes: '',
-        handlerName: '',
-        createTime: '',
-        comments: '',
-        orderTotal: ''
+        customerId: "",
+        orderStatus: "",
+        title: "",
+        paymentTimes: "",
+        handlerName: "",
+        createTime: "",
+        comments: "",
+        orderTotal: ""
       }
     };
   },
 
   methods: {
     onSubmit(orderForm) {
-      var _this=this;
-      axios.post('order',_this.orderForm).then(res=>{
+      var _this = this;
+      axios.post("order", _this.orderForm).then(res => {
         console.log(res);
-        _this.loading=false;
-      })
+        _this.loading = false;
+      });
     }
   }
 };

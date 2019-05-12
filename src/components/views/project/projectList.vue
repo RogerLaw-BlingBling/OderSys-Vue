@@ -34,8 +34,8 @@
       <el-table-column prop="duration" label="预计工期" width="170" sortable></el-table-column>
       <el-table-column label="操作" width="150">
         <template slot-scope="scope">
-          <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-          <el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
+          <el-button size="small" @click="onEditButton(scope.row)">编辑</el-button>
+          <el-button type="danger" size="small" @click="onDeleteButton(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -60,15 +60,16 @@
           <el-input v-model="addForm.projectName" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="订单列表">
-          <el-select v-model="selectedOrder" value-key="id" filterable placeholder="请选择" style="width:360px">
-            <el-option
-              v-for="item in options"
-              :key="item.id"
-              :label="item.title"
-              :value="item"
-            >
-             <!-- <span style="float: left">{{ item.title }}</span> -->
-      <!-- <span style="float: right; color: #8492a6; font-size: 13px">{{ item.value }}</span> -->
+          <el-select
+            v-model="selectedOrder"
+            value-key="id"
+            filterable
+            placeholder="请选择"
+            style="width:360px"
+          >
+            <el-option v-for="item in options" :key="item.id" :label="item.title" :value="item">
+              <!-- <span style="float: left">{{ item.title }}</span> -->
+              <!-- <span style="float: right; color: #8492a6; font-size: 13px">{{ item.value }}</span> -->
             </el-option>
           </el-select>
         </el-form-item>
@@ -130,13 +131,10 @@
         <el-form-item label="预计工期">
           <el-input v-model="editForm.duration" auto-complete="off" style="width:220px"></el-input>
         </el-form-item>
-        <el-form-item label="交接人">
-          <el-input v-model="editForm.contactPerson" auto-complete="off" style="width:220px"></el-input>
-        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click.native="editFormVisible = false">取消</el-button>
-        <el-button type="primary" @click.native="editSubmit" :loading="editLoading">提交</el-button>
+        <el-button type="primary" @click="onEditSubmit(row)" :loading="editLoading">提交</el-button>
       </div>
     </el-dialog>
   </section>
@@ -174,7 +172,7 @@ export default {
       },
       //编辑界面数据
       editForm: {
-        orderId: "",
+        id: "",
         projectName: "",
         status: "",
         beginTime: "",
@@ -194,7 +192,7 @@ export default {
 
       //编辑界面数据
       addForm: {
-        // orderId: "",
+        orderId: "",
         projectName: "",
         status: "",
         beginTime: "",
@@ -241,19 +239,36 @@ export default {
     onAddProjectButton() {
       this.addFormVisible = true;
       // this.addForm = Object.assign({}, row);
-      axios.get('/order').then((res)=>{
-        this.options=res.data.content;
+      axios.get("/order").then(res => {
+        this.options = res.data.content;
         // this.addForm.orderId=res.data.orderId;
-        console.log(orderId)
+        console.log(orderId);
+      });
+    },
+    
+    //删除
+    onDeleteButton(row){
+      axios.delete(`project/`+row.id).then(res=>{
+        this.loadData();
       })
     },
-    //删除
-    handleDel: function(index, row) {},
     //显示编辑界面
-    handleEdit: function(index, row) {
+    onEditButton(row) {
       this.editFormVisible = true;
-      this.editForm = Object.assign({}, row);
-      // window.alert("点击成功");
+      this.editForm = {
+        id: row.id,
+        projectName: row.projectName,
+        duration: row.duration,
+        beginTime: row.beginTime,
+        endTime: row.endTime
+      };
+    },
+
+    //编辑提交
+    onEditSubmit(row) {
+      axios.post(`project?id=${this.editForm.id}`,this.editForm).then(res => {
+        console.log(row.id);
+      });
     },
     handleSizeChange: function(val) {
       //改变table显示条数回调函数
@@ -261,23 +276,24 @@ export default {
       console.log(val);
       this.loadData();
     },
+
     handleCurrentChange: function(val) {
       //改变table当前页回调函数
       this.currentPage = val; //丢进去查询里，重新查询
       console.log(val);
       this.loadData();
     },
-    //编辑提交
-    editSubmit() {
 
-    },
     //新增
     onSubmitProject() {
       // const orderId = this.selectedOrder.id;
-      const orderId=this.selectedOrder.orderId;
-      axios.post(`/project?orderId=${orderId}`,this.addForm).then(res=>{
-      this.addFormVisible = false;
-      }).catch()
+      const orderId = this.selectedOrder.orderId;
+      axios
+        .post(`/project?orderId=${orderId}`, this.addForm)
+        .then(res => {
+          this.addFormVisible = false;
+        })
+        .catch();
     },
 
     selsChange: function(sels) {

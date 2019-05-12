@@ -23,7 +23,7 @@
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item>我的消息</el-dropdown-item>
                   <el-dropdown-item>设置</el-dropdown-item>
-                  <el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>
+                  <el-dropdown-item divided @click="logout()">退出登录</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
             </el-col>
@@ -41,7 +41,6 @@
               @close="handleClose"
               background-color="#545c64"
               text-color="#fff"
-              style="min-height: 100%;"
               theme="dark"
               active-text-color="#ffd04b"
             >
@@ -104,7 +103,7 @@
           <el-main>
             <router-view></router-view>
           </el-main>
-          <el-footer>Footer</el-footer>
+          <!-- <el-footer>Footer</el-footer> -->
         </el-container>
       </el-container>
     </el-container>
