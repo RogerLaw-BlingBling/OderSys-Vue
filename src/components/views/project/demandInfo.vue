@@ -31,6 +31,7 @@
             </el-upload> -->
             <el-button type="primary" @click="selectFile" size="small">选择文件</el-button>
             <el-button type="success" size="small" @click="submitFile">上传到服务器</el-button>
+            <el-tag type="success" v-show="showTag" closable @close="closeTag">{{fileList.name}}</el-tag>
           <!-- </el-col> -->
         </el-row>
       </el-form>
@@ -85,7 +86,8 @@ export default {
         // }
       ],
       value: "",
-      selectedProject: ''
+      selectedProject: '',
+      showTag: false
 
       // fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}, {name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}]
     };
@@ -146,6 +148,7 @@ export default {
     },
     fileChange(event){
       this.fileList = event.srcElement.files[0];
+      this.showTag = true;
       // this.fileList.push(event.srcElement.files[0]);
       // var list = [];
       // list.splice()
@@ -155,8 +158,12 @@ export default {
       var formData = new FormData();
       formData.append('file', this.fileList);
       axios.post('/demand?projectId=1', formData).then(res =>{
-
+        this.loadData();
       });
+    },
+    closeTag(){
+      this.fileList = [];
+      this.showTag = false;
     }
   },
   mounted() {
