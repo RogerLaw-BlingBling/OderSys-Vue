@@ -3,7 +3,13 @@
     <div class="toolbar">
       <el-row :gutter="20">
         <el-col :span="6">
-          <el-select v-model="value" filterable placeholder="请选择" size="small" style="width:330px;min-height:60px">
+          <el-select
+            v-model="value"
+            filterable
+            placeholder="请选择"
+            size="small"
+            style="width:330px;min-height:60px"
+          >
             <el-option
               v-for="item in options"
               :key="item.value"
@@ -29,9 +35,14 @@
     <template>
       <el-table :data="tableData" style="width: 100%">
         <el-table-column prop="demandFileName" label="需求文件" width="500"></el-table-column>
-        <el-table-column prop="demandTime" label="客户名称" width="320"></el-table-column>
-        <el-table-column prop="demandTime" label="项目名" width="320"></el-table-column>
-        <el-table-column prop="demandTime" label="时间" width="320"></el-table-column>
+        <el-table-column prop="demandTime" label="客户名称" width="300"></el-table-column>
+        <el-table-column prop="demandTime" label="项目名" width="300"></el-table-column>
+        <el-table-column prop="demandTime" label="时间" width="230"></el-table-column>
+        <el-table-column label="文件操作" width="200">
+          <template slot-scope="scope">
+            <el-button type="text" size="mini" @click="downLoadButton(scope.$index, scope.row)">下载</el-button>
+          </template>
+        </el-table-column>
       </el-table>
       <el-pagination
         @size-change="handleSizeChange"
@@ -51,23 +62,29 @@ export default {
   data() {
     return {
       //下拉列表
-      options: [{
-          value: '选项1',
-          label: '黄金糕'
-        }, {
-          value: '选项2',
-          label: '双皮奶'
-        }, {
-          value: '选项3',
-          label: '蚵仔煎'
-        }, {
-          value: '选项4',
-          label: '龙须面'
-        }, {
-          value: '选项5',
-          label: '北京烤鸭'
-        }],
-        value: '',
+      options: [
+        {
+          value: "选项1",
+          label: "黄金糕"
+        },
+        {
+          value: "选项2",
+          label: "双皮奶"
+        },
+        {
+          value: "选项3",
+          label: "蚵仔煎"
+        },
+        {
+          value: "选项4",
+          label: "龙须面"
+        },
+        {
+          value: "选项5",
+          label: "北京烤鸭"
+        }
+      ],
+      value: "",
 
       // fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}, {name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}]
       tableData: [
@@ -79,9 +96,7 @@ export default {
     };
   },
   methods: {
-    loadData(){
-
-    },
+    loadData() {},
     submitUploadButton() {
       // this.$refs.upload.submit();
     },
@@ -104,7 +119,7 @@ export default {
       console.log(val);
       this.loadData();
     },
-    mounted(){
+    mounted() {
       this.loadData();
     }
   }
