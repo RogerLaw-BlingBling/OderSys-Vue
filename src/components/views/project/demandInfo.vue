@@ -1,27 +1,26 @@
 <template>
   <div class="filelist">
     <div class="toolbar">
-      <el-form :model="fileList">
+      <el-form>
         <el-row :gutter="20">
-          <el-col :span="6">
+          <!-- <el-col :span="6"> -->
             <el-select
               v-model="selectedProject"
               value-key="id"
               filterable
               placeholder="请选择"
               size="small"
-              style="width:330px;min-height:60px"
-            >
+              style="width:330px;min-height:60px">
               <el-option
-                v-for="item in options"
-                :key="item.id"
+                v-for="(item, index) in options"
+                :key="index"
                 :label="item.projectName"
-                :value="item"
+                :value="item.id"
               ></el-option>
             </el-select>
-          </el-col>
-          <el-col :span="6">
-            <el-upload action="https://localhost:8080">
+          <!-- </el-col> -->
+          <!-- <el-col :span="6"> -->
+            <!-- <el-upload action="https://localhost:8089/demand?projectId=1" :ref='upload'  :file-list="fileList" :auto-upload="false">
               <el-button type="primary" size="small">选择文件</el-button>
               <el-button
                 style="margin-left: 10px;"
@@ -29,10 +28,15 @@
                 type="success"
                 @click="submitUploadButton"
               >上传到服务器</el-button>
-            </el-upload>
-          </el-col>
+            </el-upload> -->
+            <el-button type="primary" @click="selectFile" size="small">选择文件</el-button>
+            <el-button type="success" size="small" @click="submitFile">上传到服务器</el-button>
+          <!-- </el-col> -->
         </el-row>
       </el-form>
+      <form v-show="false">
+        <input type="file" ref="fileInput" @change="fileChange($event)" name="file">
+      </form>
     </div>
 
     <template>
@@ -42,7 +46,7 @@
         <el-table-column prop="demand.uploadTime" label="时间" width="230"></el-table-column>
         <el-table-column label="文件操作" width="200">
           <template slot-scope="scope">
-            <el-button type="text" size="mini" @click="downLoadButton(scope.row)">下载</el-button>
+            <el-button type="text" size="mini" @click="downLoadButton(scope.row.demand.id)">下载</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -81,7 +85,7 @@ export default {
         // }
       ],
       value: "",
-      selectedProject: {}
+      selectedProject: ''
 
       // fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}, {name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}]
     };
@@ -102,10 +106,21 @@ export default {
     },
 
     submitUploadButton() {
-      // this.$refs.upload.submit();
+      console.log(this.fileList)
+      // var formData = new FormData();
+      // formData.append('file', this.fileList[0]);
+      // axios.post('demand?projectId=' + 1, formData).then(res=>{
+      //   console.log(res);
+      // })
+      this.$refs.upload.submit();
     },
 
-    downLoadButton(){},
+    downLoadButton(id){
+      // axios.get('/demand/' + row.demand.id +'/file').then(res=>{
+
+      // });
+      window.location.href='/demand/' + id +'/file';
+    },
 
     handleRemove(file, fileList) {
       // console.log(file, fileList);
@@ -125,6 +140,23 @@ export default {
       this.currentPage = val; //丢进去查询里，重新查询
       console.log(val);
       this.loadData();
+    },
+    selectFile(){
+      this.$refs.fileInput.click();
+    },
+    fileChange(event){
+      this.fileList = event.srcElement.files[0];
+      // this.fileList.push(event.srcElement.files[0]);
+      // var list = [];
+      // list.splice()
+      console.log(this.fileList);
+    },
+    submitFile(){
+      var formData = new FormData();
+      formData.append('file', this.fileList);
+      axios.post('/demand?projectId=1', formData).then(res =>{
+
+      });
     }
   },
   mounted() {
