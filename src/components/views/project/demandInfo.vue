@@ -3,36 +3,25 @@
     <div class="toolbar">
       <el-form>
         <el-row :gutter="20">
-          <!-- <el-col :span="6"> -->
-            <el-select
-              v-model="selectedProject"
-              value-key="id"
-              filterable
-              placeholder="请选择"
-              size="small"
-              style="width:330px;min-height:60px">
-              <el-option
-                v-for="(item, index) in options"
-                :key="index"
-                :label="item.projectName"
-                :value="item.id"
-              ></el-option>
-            </el-select>
-          <!-- </el-col> -->
-          <!-- <el-col :span="6"> -->
-            <!-- <el-upload action="https://localhost:8089/demand?projectId=1" :ref='upload'  :file-list="fileList" :auto-upload="false">
-              <el-button type="primary" size="small">选择文件</el-button>
-              <el-button
-                style="margin-left: 10px;"
-                size="small"
-                type="success"
-                @click="submitUploadButton"
-              >上传到服务器</el-button>
-            </el-upload> -->
-            <el-button type="primary" @click="selectFile" size="small">选择文件</el-button>
-            <el-button type="success" size="small" @click="submitFile">上传到服务器</el-button>
-            <el-tag type="success" v-show="showTag" closable @close="closeTag">{{fileList.name}}</el-tag>
-          <!-- </el-col> -->
+          <el-select
+            v-model="selectedProject"
+            value-key="id"
+            filterable
+            placeholder="请选择"
+            size="small"
+            style="width:330px;min-height:60px"
+          >
+            <el-option
+              v-for="(item, index) in options"
+              :key="index"
+              :label="item.projectName"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+
+          <el-button type="primary" @click="selectFile" size="small">选择文件</el-button>
+          <el-button type="success" size="small" @click="submitFile">上传到服务器</el-button>
+          <el-tag type="success" v-show="showTag" closable @close="closeTag">{{fileList.name}}</el-tag>
         </el-row>
       </el-form>
       <form v-show="false">
@@ -43,8 +32,8 @@
     <template>
       <el-table :data="demandDataTable" style="width: 100%">
         <el-table-column prop="demand.title" label="需求文件" width="500"></el-table-column>
-        <el-table-column prop="project.projectName" label="项目名" width="300"></el-table-column>
-        <el-table-column prop="demand.uploadTime" label="时间" width="230"></el-table-column>
+        <el-table-column prop="project.projectName" label="项目名" width="300" sortable></el-table-column>
+        <el-table-column prop="demand.uploadTime" label="上传时间" width="230" sortable></el-table-column>
         <el-table-column label="文件操作" width="200">
           <template slot-scope="scope">
             <el-button type="text" size="mini" @click="downLoadButton(scope.row.demand.id)">下载</el-button>
@@ -79,17 +68,10 @@ export default {
       total: 0, //总数
 
       //下拉工程名列表
-      options: [
-        // {
-        //   value: '选项1',
-        //   projectName: '黄金糕'
-        // }
-      ],
+      options: [],
       value: "",
-      selectedProject: '',
+      selectedProject: "",
       showTag: false
-
-      // fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}, {name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}]
     };
   },
   methods: {
@@ -108,7 +90,7 @@ export default {
     },
 
     submitUploadButton() {
-      console.log(this.fileList)
+      console.log(this.fileList);
       // var formData = new FormData();
       // formData.append('file', this.fileList[0]);
       // axios.post('demand?projectId=' + 1, formData).then(res=>{
@@ -117,11 +99,8 @@ export default {
       this.$refs.upload.submit();
     },
 
-    downLoadButton(id){
-      // axios.get('/demand/' + row.demand.id +'/file').then(res=>{
-
-      // });
-      window.location.href='/demand/' + id +'/file';
+    downLoadButton(id) {
+      window.location.href = "/demand/" + id + "/file";
     },
 
     handleRemove(file, fileList) {
@@ -143,10 +122,10 @@ export default {
       console.log(val);
       this.loadData();
     },
-    selectFile(){
+    selectFile() {
       this.$refs.fileInput.click();
     },
-    fileChange(event){
+    fileChange(event) {
       this.fileList = event.srcElement.files[0];
       this.showTag = true;
       // this.fileList.push(event.srcElement.files[0]);
@@ -154,14 +133,15 @@ export default {
       // list.splice()
       console.log(this.fileList);
     },
-    submitFile(){
+    submitFile() {
+      const id=this.selectedProject;
       var formData = new FormData();
-      formData.append('file', this.fileList);
-      axios.post('/demand?projectId=1', formData).then(res =>{
+      formData.append("file", this.fileList);
+      axios.post(`/demand?projectId=${id}`, formData).then(res => {
         this.loadData();
       });
     },
-    closeTag(){
+    closeTag() {
       this.fileList = [];
       this.showTag = false;
     }
