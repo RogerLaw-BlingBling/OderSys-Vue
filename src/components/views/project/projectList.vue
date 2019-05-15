@@ -112,9 +112,9 @@
             <el-radio class="radio" :label="0">已交付</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="起始时间">
-          <el-date-picker type="date" placeholder="选择日期" v-model="editForm.beginTime"></el-date-picker>终止时间
-          <el-date-picker type="date" placeholder="选择日期" v-model="editForm.endTime"></el-date-picker>
+        <el-form-item label="项目时长">
+          <el-date-picker  type="date"  v-model="editForm.beginTime"></el-date-picker>---
+          <el-date-picker  type="date"  v-model="editForm.endTime"></el-date-picker>
         </el-form-item>
         <el-form-item label="预计工期">
           <el-input v-model="editForm.duration" auto-complete="off" style="width:220px"></el-input>

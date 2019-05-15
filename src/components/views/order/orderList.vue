@@ -95,7 +95,9 @@
             <div class="grid-content col-font">订单编号：</div>
           </el-col>
           <el-col :span="6">
-            <div class="grid-content col-font">订单号</div>
+            <div class="grid-content col-font">
+              <template slot-scope="scope">{{scope.row.order.orderId}}</template>
+            </div>
           </el-col>
           <el-col :span="2.5">
             <div class="grid-content col-font">订单状态：</div>
@@ -280,7 +282,12 @@ export default {
     lookOrder(row) {
       console.log(row);
       this.orderDescVisible = true;
-      alert(row.orderId);
+      
+      const oid=row.orderId;
+      alert(oid);
+      axios.get(`order/${oid}`).then(res=>{
+
+      })
     }
   },
 
