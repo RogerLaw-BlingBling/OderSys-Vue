@@ -58,7 +58,9 @@
         <el-table-column prop="handlerName" label="经办人" width="240"></el-table-column>
         <el-table-column prop="title" label="订单标题" width="240"></el-table-column>
         <!-- 如果用template显示，scope=“scope”出错就用slot-scope=“scope”，这里你可以用vue过滤器 -->
-        <el-table-column prop="createTime" label="建立时间" width="240"></el-table-column>
+        <el-table-column label="建立时间" width="240">
+          <template>{{createTime | dateFrm}}</template>
+        </el-table-column>
         <el-table-column label="订单状态" width="240">
           <template slot-scope="scope">{{scope.row.orderStatus | statusType}}</template>
         </el-table-column>
@@ -192,6 +194,7 @@
 </template>
 
 <script>
+import moment from 'moment';
 import axios from "axios";
 import { truncate, rename } from "fs";
 export default {
@@ -247,6 +250,7 @@ export default {
     loadData() {
       const page = this.currentPage;
       const pageSize = this.pageSize;
+
       axios
         .get(`/order?page=${page - 1}&size=${pageSize}`)
         .then(res => {
@@ -289,6 +293,9 @@ export default {
         return "未开始";
       } else val == "FINISHED";
       return "已结束";
+    },
+    dateFrm:function(el){
+      return moment(el).format("YYYY-MM-DD HH:mm:ss")
     }
   },
   mounted() {

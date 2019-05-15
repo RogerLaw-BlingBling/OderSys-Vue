@@ -5,7 +5,9 @@
         <template>
           <el-table :data="projectTable">
             <el-table-column prop="projectName" label="项目名称" width="200"></el-table-column>
-            <el-table-column prop="endTime" label="结束日期" width="200"></el-table-column>
+            <el-table-column prop="endTime" label="结束日期" width="200">
+              <template slot-scope="scope">{{scope.endTime | dateFrm}}</template>
+            </el-table-column>
             <el-table-column prop="projectStatus" label="项目状态" width="200">
               <template slot-scope="scope">{{scope.row.projectStatus | statusType}}</template>
             </el-table-column>
@@ -30,6 +32,7 @@
 </template>
 
 <script>
+import moment from 'moment'
 import axios from "axios";
 import { truncate, rename } from "fs";
 export default {
@@ -76,6 +79,9 @@ export default {
     //过滤器，局部的过滤的函数放这里
     statusType: function(val) {
       if (val == "IN_PROGRESS") return "进行中";
+    },
+    dateFrm: function(el){
+      return moment(el).format("YYYY-MM-DD")
     }
   },
 

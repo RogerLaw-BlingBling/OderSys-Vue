@@ -6,6 +6,8 @@ import router from './router'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import VueParticles from 'vue-particles'
+import moment from 'moment'
+Vue.prototype.$moment = moment;//赋值使用
 Vue.config.productionTip = false
 import axios from 'axios'
 Vue.prototype.$axios=axios

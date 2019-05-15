@@ -29,8 +29,12 @@
       <el-table-column label="工程状态" width="150" sortable>
         <template slot-scope="scope">{{scope.row.projectStatus | statusType}}</template>
       </el-table-column>
-      <el-table-column prop="beginTime" label="起始时间" width="150" sortable></el-table-column>
-      <el-table-column prop="endTime" label="结束时间" width="150" sortable></el-table-column>
+      <el-table-column label="起始时间" width="150" sortable>
+        <template slot-scope="scope">{{scope.row.beginTime | dateFrm}}</template>
+      </el-table-column>
+      <el-table-column label="结束时间" width="150" sortable>
+        <template slot-scope="scope">{{scope.row.endTime | dateFrm}}</template>
+      </el-table-column>
       <el-table-column prop="duration" label="预计工期" width="170" sortable></el-table-column>
       <el-table-column label="操作" width="150">
         <template slot-scope="scope">
@@ -88,22 +92,6 @@
         <el-form-item label="预计工期">
           <el-input v-model="addForm.duration" auto-complete="off" style="width:220px"></el-input>
         </el-form-item>
-        <el-upload
-          class="upload-demo"
-          ref="upload"
-          action="https://jsonplaceholder.typicode.com/posts/"
-          :on-remove="handleRemove"
-          :file-list="addForm.fileList"
-          :auto-upload="false"
-        >
-          <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-          <el-button
-            style="margin-left: 10px;"
-            size="small"
-            type="success"
-            @click="submitUpload"
-          >上传到服务器</el-button>
-        </el-upload>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click.native="addFormVisible = false">取消</el-button>
@@ -141,6 +129,7 @@
 </template>
 
 <script>
+import moment from 'moment'
 import axios from "axios";
 export default {
   data() {
@@ -312,6 +301,9 @@ export default {
         return "未开始";
       } else val == "FINISHED";
       return "已结束";
+    },
+    dateFrm: function(el){
+      return moment(el).format("YYYY-MM-DD")
     }
   },
   mounted() {

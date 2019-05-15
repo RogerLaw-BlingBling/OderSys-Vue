@@ -33,7 +33,9 @@
       <el-table :data="demandDataTable" style="width: 100%">
         <el-table-column prop="demand.title" label="需求文件" width="500"></el-table-column>
         <el-table-column prop="project.projectName" label="项目名" width="300" sortable></el-table-column>
-        <el-table-column prop="demand.uploadTime" label="上传时间" width="230" sortable></el-table-column>
+        <el-table-column label="上传时间" width="230" sortable>
+          <template slot-scope="scope">{{scope.row.uploadTime | dateFrm}}</template>
+        </el-table-column>
         <el-table-column label="文件操作" width="200">
           <template slot-scope="scope">
             <el-button type="text" size="mini" @click="downLoadButton(scope.row.demand.id)">下载</el-button>
@@ -54,6 +56,7 @@
 </template>
 
 <script>
+import moment from "moment";
 import axios from "axios";
 import { connect } from "net";
 export default {
@@ -134,7 +137,7 @@ export default {
       console.log(this.fileList);
     },
     submitFile() {
-      const id=this.selectedProject;
+      const id = this.selectedProject;
       var formData = new FormData();
       formData.append("file", this.fileList);
       axios.post(`/demand?projectId=${id}`, formData).then(res => {
@@ -144,6 +147,11 @@ export default {
     closeTag() {
       this.fileList = [];
       this.showTag = false;
+    }
+  },
+  filters: {
+    dateFrm: function(el){
+      return moment(el).format("YYYY-MM-DD HH:mm:ss")
     }
   },
   mounted() {
