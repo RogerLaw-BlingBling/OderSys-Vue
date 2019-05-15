@@ -59,7 +59,7 @@
         <el-table-column prop="title" label="订单标题" width="240"></el-table-column>
         <!-- 如果用template显示，scope=“scope”出错就用slot-scope=“scope”，这里你可以用vue过滤器 -->
         <el-table-column label="建立时间" width="240">
-          <template>{{createTime | dateFrm}}</template>
+          <template slot-scope="scope">{{scope.row.createTime | dateFrm}}</template>
         </el-table-column>
         <el-table-column label="订单状态" width="240">
           <template slot-scope="scope">{{scope.row.orderStatus | statusType}}</template>

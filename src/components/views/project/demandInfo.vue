@@ -34,7 +34,7 @@
         <el-table-column prop="demand.title" label="需求文件" width="500"></el-table-column>
         <el-table-column prop="project.projectName" label="项目名" width="300" sortable></el-table-column>
         <el-table-column label="上传时间" width="230" sortable>
-          <template slot-scope="scope">{{scope.row.uploadTime | dateFrm}}</template>
+          <template scope="scope">{{scope.row.demand.uploadTime | dateFrm}}</template>
         </el-table-column>
         <el-table-column label="文件操作" width="200">
           <template slot-scope="scope">
@@ -151,6 +151,7 @@ export default {
   },
   filters: {
     dateFrm: function(el){
+      console.log(el);
       return moment(el).format("YYYY-MM-DD HH:mm:ss")
     }
   },
