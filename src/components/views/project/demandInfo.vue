@@ -18,7 +18,6 @@
               :value="item.id"
             ></el-option>
           </el-select>
-
           <el-button type="primary" @click="selectFile" size="small">选择文件</el-button>
           <el-button type="success" size="small" @click="submitFile">上传到服务器</el-button>
           <el-tag type="success" v-show="showTag" closable @close="closeTag">{{fileList.name}}</el-tag>

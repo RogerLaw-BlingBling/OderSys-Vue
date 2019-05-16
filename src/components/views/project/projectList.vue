@@ -68,7 +68,9 @@
             v-model="selectedOrder"
             value-key="id"
             filterable
+            remote
             placeholder="请选择"
+            :remote-method="remoteMethod"
             style="width:360px"
           >
             <el-option v-for="item in options" :key="item.id" :label="item.title" :value="item">
@@ -113,8 +115,8 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="项目时长">
-          <el-date-picker  type="date"  v-model="editForm.beginTime"></el-date-picker>---
-          <el-date-picker  type="date"  v-model="editForm.endTime"></el-date-picker>
+          <el-date-picker type="date" v-model="editForm.beginTime"></el-date-picker>---
+          <el-date-picker type="date" v-model="editForm.endTime"></el-date-picker>
         </el-form-item>
         <el-form-item label="预计工期">
           <el-input v-model="editForm.duration" auto-complete="off" style="width:220px"></el-input>
@@ -129,8 +131,9 @@
 </template>
 
 <script>
-import moment from 'moment'
+import moment from "moment";
 import axios from "axios";
+import { connect } from 'net';
 export default {
   data() {
     return {
@@ -228,18 +231,18 @@ export default {
     onAddProjectButton() {
       this.addFormVisible = true;
       // this.addForm = Object.assign({}, row);
-      axios.get("/order").then(res => {
+      axios.get("/order?size=20&sort=createTime,desc").then(res => {
         this.options = res.data.content;
         // this.addForm.orderId=res.data.orderId;
         console.log(orderId);
       });
     },
-    
+
     //删除
-    onDeleteButton(row){
-      axios.delete(`project/`+row.id).then(res=>{
+    onDeleteButton(row) {
+      axios.delete(`project/` + row.id).then(res => {
         this.loadData();
-      })
+      });
     },
     //显示编辑界面
     onEditButton(row) {
@@ -253,9 +256,26 @@ export default {
       };
     },
 
+    //远端请求
+    remoteMethod(query) {
+      if (query !== "") {
+        this.loading = true;
+        setTimeout(() => {
+          this.loading = false;
+          axios.get(`/order?keyword=${query}`).then(res => {
+            this.options = res.data.content;
+            // this.addForm.orderId=res.data.orderId;
+            console.log(query);
+          });
+        }, 200);
+      } else {
+        this.options = [];
+      }
+    },
+
     //编辑提交
     onEditSubmit(row) {
-      axios.post(`project?id=${this.editForm.id}`,this.editForm).then(res => {
+      axios.post(`project?id=${this.editForm.id}`, this.editForm).then(res => {
         console.log(row.id);
       });
     },
@@ -302,8 +322,8 @@ export default {
       } else val == "FINISHED";
       return "已结束";
     },
-    dateFrm: function(el){
-      return moment(el).format("YYYY-MM-DD")
+    dateFrm: function(el) {
+      return moment(el).format("YYYY-MM-DD");
     }
   },
   mounted() {

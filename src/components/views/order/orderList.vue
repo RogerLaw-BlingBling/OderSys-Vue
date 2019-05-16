@@ -90,104 +90,104 @@
     >
       <div class="dialog-div">
         <!-- 第一行 -->
-        <el-row>
+        <el-row :gutter="20">
           <el-col :span="2.5">
             <div class="grid-content col-font">订单编号：</div>
           </el-col>
-          <el-col :span="6">
+          <el-col :span="5">
             <div class="grid-content col-font">
-              <template slot-scope="scope">{{scope.row.order.orderId}}</template>
+              <div class="grid-content col-font">{{dialogData.order.orderId}}</div>
             </div>
           </el-col>
           <el-col :span="2.5">
             <div class="grid-content col-font">订单状态：</div>
           </el-col>
-          <el-col :span="6">
-            <div class="grid-content col-font">订单号</div>
+          <el-col :span="5">
+            <div class="grid-content col-font">{{dialogData.order.orderStatus | statusType}}</div>
           </el-col>
           <el-col :span="2.5">
             <div class="grid-content col-font">订单标题：</div>
           </el-col>
-          <el-col :span="6">
-            <div class="grid-content col-font">订单号</div>
+          <el-col :span="5">
+            <div class="grid-content col-font">{{dialogData.order.title}}</div>
           </el-col>
         </el-row>
         <!-- 第二行 -->
-        <el-row>
+        <el-row :gutter="20">
           <el-col :span="2.5">
             <div class="grid-content col-font">项款分期：</div>
           </el-col>
-          <el-col :span="6">
-            <div class="grid-content col-font">订单号</div>
+          <el-col :span="5">
+            <div class="grid-content col-font">{{dialogData.order.paymentTimes}}</div>
           </el-col>
           <el-col :span="2.5">
             <div class="grid-content col-font">经办人：</div>
           </el-col>
-          <el-col :span="6">
-            <div class="grid-content col-font">订单号</div>
+          <el-col :span="5">
+            <div class="grid-content col-font">{{dialogData.order.handlerName}}</div>
           </el-col>
           <el-col :span="2.5">
             <div class="grid-content col-font">创建日期：</div>
           </el-col>
-          <el-col :span="6">
-            <div class="grid-content col-font">订单号</div>
+          <el-col :span="5">
+            <div class="grid-content col-font">{{dialogData.order.createTime | dateFrm}}</div>
           </el-col>
         </el-row>
         <!-- 第三行 -->
-        <el-row>
+        <el-row :gutter="20">
           <el-col :span="2.5">
             <div class="grid-content col-font">订单备注：</div>
           </el-col>
-          <el-col :span="6">
-            <div class="grid-content col-font">订单号</div>
+          <el-col :span="5">
+            <div class="grid-content col-font">{{dialogData.order.comments}}</div>
           </el-col>
           <el-col :span="2.5">
             <div class="grid-content col-font">订单总额：</div>
           </el-col>
-          <el-col :span="6">
-            <div class="grid-content col-font">订单号</div>
+          <el-col :span="5">
+            <div class="grid-content col-font">{{dialogData.order.orderTotal}}</div>
           </el-col>
           <el-col :span="2.5">
             <div class="grid-content col-font">客户名称：</div>
           </el-col>
-          <el-col :span="6">
-            <div class="grid-content col-font">订单号</div>
+          <el-col :span="5">
+            <div class="grid-content col-font">{{dialogData.customer.customerName}}</div>
           </el-col>
         </el-row>
         <!-- 第四行 -->
-        <el-row>
+        <el-row :gutter="20">
           <el-col :span="2.5">
             <div class="grid-content col-font">客户地址：</div>
           </el-col>
-          <el-col :span="6">
-            <div class="grid-content col-font">订单号</div>
+          <el-col :span="5">
+            <div class="grid-content col-font">{{dialogData.customer.address}}</div>
           </el-col>
           <el-col :span="2.5">
-            <div class="grid-content col-font">联系人：</div>
+            <div class="grid-content col-font">甲方联系人：</div>
           </el-col>
-          <el-col :span="6">
-            <div class="grid-content col-font">订单号</div>
+          <el-col :span="5">
+            <div class="grid-content col-font">{{dialogData.customer.contactPerson}}</div>
           </el-col>
           <el-col :span="2.5">
             <div class="grid-content col-font">联系电话：</div>
           </el-col>
-          <el-col :span="6">
-            <div class="grid-content col-font">订单号</div>
+          <el-col :span="5">
+            <div class="grid-content col-font">{{dialogData.customer.mobilePhone}}</div>
           </el-col>
         </el-row>
         <!-- 第五行 -->
-        <el-row>
+        <el-row :gutter="20">
           <el-col :span="2.5">
             <div class="grid-content col-font">开户银行：</div>
           </el-col>
-          <el-col :span="6">
-            <div class="grid-content col-font">订单号</div>
+          <el-col :span="5" v-show="dialogData.customer">
+            <div class="grid-content col-font">{{dialogData.customer.bankName}}</div>
           </el-col>
           <el-col :span="2.5">
             <div class="grid-content col-font">卡号：</div>
           </el-col>
-          <el-col :span="6">
-            <div class="grid-content col-font">订单号</div>
+          <el-col :span="5">
+            <div class="grid-content col-font">{{dialogData.customer.bankAccountNum}}</div>
           </el-col>
         </el-row>
       </div>
@@ -227,7 +227,18 @@ export default {
       currentPage: 1, //当前页
       pageSize: 10, //显示条数
       total: 0, //总数
-      handleClose: true
+      handleClose: true,
+
+      dialogData: {
+        order: {
+          orderId: '',
+          orderStatus:'',
+          title:''
+        },
+        customer:{
+          bankName:''
+        }
+      }
     };
   },
   methods: {
@@ -247,6 +258,7 @@ export default {
     },
     toAddOrder() {
       this.$router.push({ name: "AddOrder" });
+      
     },
 
     loadData() {
@@ -281,12 +293,14 @@ export default {
     //查看订单详情
     lookOrder(row) {
       console.log(row);
-      this.orderDescVisible = true;
+      
       
       const oid=row.orderId;
-      alert(oid);
+      // alert(oid);
       axios.get(`order/${oid}`).then(res=>{
-
+        console.log(res)
+        this.dialogData = res.data;
+        this.orderDescVisible = true;
       })
     }
   },

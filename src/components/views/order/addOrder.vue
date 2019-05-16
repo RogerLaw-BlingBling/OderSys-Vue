@@ -12,28 +12,26 @@
           </el-col>
           <el-col :span="6">
             <div class="grid-content bg-purple">
-              <!-- <el-form-item>
-                <el-input v-model="orderForm.customerId" placeholder="客户编号"></el-input>
-              </el-form-item>-->
-              <el-select v-model="value" filterable placeholder="用户名称" style="width:336px">
+              <el-select
+                v-model="orderForm.customerId"
+                value-key="id"
+                filterable
+                remote
+                placeholder="用户名称"
+                :remote-method="remoteMethod"
+                style="width:336px"
+              >
                 <el-option
                   v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
+                  :key="item.id"
+                  :label="item.customerName"
+                  :value="item.id"
                 ></el-option>
               </el-select>
             </div>
           </el-col>
         </el-row>
         <el-row :gutter="20">
-          <el-col :span="6">
-            <div class="grid-content bg-purple">
-              <el-form-item>
-                <el-input v-model="orderForm.orderStatus" placeholder="订单状态" value="CREATED"></el-input>
-              </el-form-item>
-            </div>
-          </el-col>
           <el-col :span="6">
             <div class="grid-content bg-purple">
               <el-form-item>
@@ -65,7 +63,7 @@
             </div>
           </el-col>
         </el-row>
-        <el-row :gutter="20">
+        <!-- <el-row :gutter="20">
           <el-col :span="6">
             <div class="grid-content bg-purple">
               <el-form-item>
@@ -90,9 +88,9 @@
               </el-form-item>
             </div>
           </el-col>
-        </el-row>
+        </el-row> -->
         <el-form-item label="订单备注">
-          <el-input type="textarea" v-model="orderForm.desc" style="width:628px"></el-input>
+          <el-input type="textarea" v-model="orderForm.comments" style="width:628px"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit('orderForm')">立即创建</el-button>
@@ -100,6 +98,15 @@
         </el-form-item>
       </el-form>
     </div>
+
+    <!-- 弹出信息 -->
+    <el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
+      <span>订单创建成功</span>
+      <span slot="footer" class="dialog-footer">
+        <!-- <el-button @click="dialogVisible = false">取 消</el-button> -->
+        <el-button type="primary" @click="onReturnButton()">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -109,6 +116,13 @@ import { truncate, rename } from "fs";
 export default {
   data() {
     return {
+      dialogVisible: false,
+
+      //下拉列表
+      value: "",
+      options: [],
+      // selectedCustomer: "",
+
       orderForm: {
         customerId: "",
         orderStatus: "",
@@ -123,13 +137,51 @@ export default {
   },
 
   methods: {
+    loadData() {
+      axios.get(`customer?size=20`).then(res => {
+        this.options = res.data.content;
+      });
+    },
+
     onSubmit(orderForm) {
       var _this = this;
       axios.post("order", _this.orderForm).then(res => {
         console.log(res);
         _this.loading = false;
+        this.dialogVisible = true;
       });
-    }
+    },
+
+    //远端请求
+    remoteMethod(query) {
+      if (query !== "") {
+        this.loading = true;
+        setTimeout(() => {
+          this.loading = false;
+          axios.get(`/customer?keyword=${query}`).then(res => {
+            this.options = res.data.content;
+            // this.addForm.orderId=res.data.orderId;
+            console.log(query);
+          });
+        }, 200);
+      } else {
+        this.options = [];
+      }
+    },
+
+    onReturnButton() {
+      this.dialogVisible = false;
+      this.$router.push({ name: "OrderList" });
+    },
+
+    // @(change = "changeCustomer")
+    // changeCustomer(val) {
+    //   console.log(val);
+    //   alert(val);
+    // }
+  },
+  mounted() {
+    this.loadData();
   }
 };
 </script>
