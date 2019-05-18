@@ -13,10 +13,12 @@ import axios from 'axios'
 Vue.prototype.$axios=axios
 Vue.use(ElementUI)
 Vue.use(VueParticles)
+import store from './store/store'
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })

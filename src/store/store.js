@@ -8,21 +8,17 @@ import * as types from './types'
 Vue.use(Vuex);
 export default new Vuex.Store({
     state: {
-        username: {},
-        token: null,
-        title: ''
+        user: {},
+        isLogin: false,
     },
     mutations: {
-        [types.LOGIN]: (state, data) => {
-            localStorage.token = data;
-            state.token = data;
+        loginUser(state, data){
+            state.user = data;
+            state.isLogin = (data != null && data != {})
         },
-        [types.LOGOUT]: (state) => {
-            localStorage.removeItem('token');
-            state.token = null
-        },
-        [types.TITLE]: (state, data) => {
-            state.title = data;
-        }
+        // [types.LOGOUT]: (state) => {
+        //     localStorage.removeItem('token');
+        //     state.token = null
+        // },
     }
 })

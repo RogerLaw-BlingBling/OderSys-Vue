@@ -16,6 +16,8 @@ import AccountingDetail from '@/components/views/finance/paymentInfo.vue'
 import BusinessStatics from '@/components/views/businessStatistics/businessStatistics.vue'
 import DemandInfo from '@/components/views/project/demandInfo.vue'
 
+// import store from '@/store/store'
+
 Vue.use(Router)
 
 let router= new Router({
@@ -125,8 +127,22 @@ let router= new Router({
 // }
 
 router.beforeEach((to, from, next)=>{
+  console.log('Auth ' + (to.meta.requrieAuth ? 'required' :'not required'))
+  console.log(store.state.user)
+  if(to.meta.requrieAuth) {
+    if(store.state.isLogin) {
+      next()
+      return
+    }
+
+    next('/')
+    alert('Login required')
+    return
+  }
+  next()
+
   // if(to.meta.requrieAuth){
-  //   if(store.state.token){
+  //   if(store.state.user){
   //     next();
   //   }
   //   else{
@@ -149,6 +165,6 @@ router.beforeEach((to, from, next)=>{
   // } else{
   //   next();
   // }
-  next();
+  // next();
 })
 export default router

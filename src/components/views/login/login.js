@@ -35,25 +35,20 @@ export default {
   methods: {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
-        var param = {
-          username: this.loginForm.username,
-          password: this.loginForm.password
-        }
-        if (valid) {
-            this.$axios({
-              method: 'post',
-              url: '/auth?login',
-              data: param
-            }).then((res) => {
-              sessionStorage.setItem("username", this.loginForm.username)
-              this.$router.push({ name: 'Main' })
-            }).catch (err=>{
-              alert('请验证用户名或密码!')
-            }) 
-        } else {
-          console.log('error submit!!')
-          return false
-        }
+        if (valid) axios.post('/auth?login', this.loginForm).then((resp) => {
+          const data = resp.data
+          console.log(data)
+          this.$store.commit('loginUser', data.data)
+          console.log(this.$store.state.user)
+          if (data.error) {
+            alert("Username or password not match.")
+          } else {
+            this.$router.push({ name: 'Main' })
+          }
+        }, (err) => {
+          alert('Network Error')
+        })
+        else alert('Form validation error')
       })
     },
     resetForm(formName) {
