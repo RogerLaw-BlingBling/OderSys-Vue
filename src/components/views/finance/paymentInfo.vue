@@ -1,9 +1,9 @@
 <template>
   <div class="accounting">
-    <div class="detail">
+    <div class="payment">
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
         <el-tab-pane label="入款单" name="first">
-          <div class="detail_news">
+          <div class="payment_news">
             <el-form
               :model="paymentForm"
               :rules="rules"
@@ -12,7 +12,7 @@
               class="demo-paymentForm"
             >
               <!-- 日期 -->
-              <div class="detail_top">
+              <div class="payment_top">
                 <div class="block">
                   <span class="demonstration">下次收款时间：</span>
                   <el-date-picker
@@ -48,7 +48,7 @@
 
               <!-- 付款单位、经手人等信息 -->
 
-              <div class="detail_content">
+              <div class="payment_content">
                 <el-form-item label="付款人：" prop="payer">
                   <el-input v-model="paymentForm.payer"></el-input>
                 </el-form-item>
@@ -66,7 +66,7 @@
                 </el-form-item>
               </div>
 
-              <div class="detail_one">
+              <div class="payment_one">
                 <span class="demonstration">附加说明：</span>
                 <el-input v-model="paymentForm.addition"></el-input>
 
@@ -74,27 +74,27 @@
                 <el-input v-model="paymentForm.summary"></el-input>
               </div>
 
-              <el-form-item class="detail_two" label="收取金额：¥ " prop="amount">
+              <el-form-item class="payment_two" label="收取金额：¥ " prop="amount">
                 <el-input v-model="paymentForm.amount"></el-input>
               </el-form-item>
               <br>
               <br>
               <br>
               <br>
-              <el-form-item class="detail_two">
+              <el-form-item class="payment_two">
                 <el-button type="primary" @click="onSubmitButton()">提交</el-button>
                 <el-button @click="resetForm('paymentForm')">重置</el-button>
               </el-form-item>
             </el-form>
           </div>
 
-          <div class="detailTable">
+          <div class="paymentTable">
             <el-table :data="paymentTable" border style="width: 100%" max-height="600">
               <el-table-column label="收款录入时间" sortable width="165">
                 <template slot-scope="scope">{{scope.row.createTime | dateFrm}}</template>
               </el-table-column>
-              <el-table-column label="下次收款时间" sortable width="165">
-                <template slot-scope="scope">{{scope.row.paymentTime | dateFrm}}</template>
+              <el-table-column label="下次收款时间" sortable width="130">
+                <template slot-scope="scope">{{scope.row.paymentTime | dateFrm2}}</template>
               </el-table-column>
               <el-table-column prop="payer" label="汇款人" width="90"></el-table-column>
               <el-table-column prop="payee" label="经手人" width="90"></el-table-column>
@@ -104,15 +104,16 @@
               <el-table-column prop="amount" label="收取金额(¥)" width="110"></el-table-column>
               <el-table-column fixed="right" label="操作" width="160">
                 <template slot-scope="scope">
-                  <el-button size="small" @click="editData(scope.row,scope.$index)">编辑</el-button>
+                  <el-button size="small" @click="editDataButton(scope.row)">编辑</el-button>
                   <el-button
                     size="small"
                     type="danger"
-                    @click.native.prevent="deleteRow(scope.$index, tableData)"
+                    @click.native.prevent="onDeleteButton(scope.row)"
                   >删除</el-button>
                 </template>
               </el-table-column>
             </el-table>
+            <!-- 分页 -->
             <el-pagination
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
@@ -132,73 +133,74 @@
           <br>
 
           <!-- =========== 编辑弹出框 ============ -->
-          <div class="Modals">
-            <el-dialog title="内容编辑" :visible.sync="editFormVisible">
-              <el-form
-                :model="ModalsForm"
-                :rules="rules"
-                ref="ModalsForm"
-                label-width="100px"
-                class="demo-ModalsForm"
-              >
-                <!-- 日期 -->
-                <div class="detail_top">
-                  <div class="block">
-                    <span class="demonstration">下次收款时间：</span>
-                    <el-date-picker
-                      v-model="ModalsForm.paymenttime"
-                      type="date"
-                      placeholder="选择日期"
-                      :picker-options="pickerOptions0"
-                    ></el-date-picker>
-                  </div>
 
-                  <!-- 单据编号 -->
-                  <el-form-item label="单据编号：" prop="orderId">
+          <el-dialog title="内容编辑" :visible.sync="editFormVisible">
+            <el-form
+              :model="ModalsForm"
+              :rules="rules"
+              ref="ModalsForm"
+              label-width="100px"
+              width="30%"
+              class="demo-ModalsForm"
+            >
+              <!-- 日期 -->
+
+              <span class="demonstration">下次收款时间：</span>
+              <el-date-picker
+                v-model="ModalsForm.paymentTime"
+                type="date"
+                placeholder="选择日期"
+                :picker-options="pickerOptions0"
+              ></el-date-picker>
+              <br>
+              <br>
+
+              <!-- 单据编号 -->
+              <!-- <el-form-item label="单据编号：" prop="orderId">
                     <el-input v-model="ModalsForm.orderId"></el-input>
-                  </el-form-item>
-                </div>
+              </el-form-item>-->
+              <!-- 付款单位、经手人等信息 -->
 
-                <!-- 付款单位、经手人等信息 -->
-                <el-form-item class="Modals_one" label="付款方：" prop="payer">
-                  <el-input v-model="ModalsForm.payer"></el-input>
-                </el-form-item>
+              <!-- 付款单位、经手人等信息 -->
+              <el-form-item class="Modals_one" label="付款方：" prop="payer" style="width:500px">
+                <el-input v-model="ModalsForm.payer"></el-input>
+              </el-form-item>
 
-                <el-form-item label="经手人：" prop="payee">
-                  <el-input v-model="ModalsForm.payee"></el-input>
-                </el-form-item>
+              <el-form-item label="经手人：" prop="payee" style="width:230px">
+                <el-input v-model="ModalsForm.payee"></el-input>
+              </el-form-item>
 
-                <el-form-item label="付款方式" prop="paymentTerm">
-                  <el-select v-model="ModalsForm.paymentTerm" placeholder="请选择付款方式">
-                    <el-option label="微信支付" value="微信支付"></el-option>
-                    <el-option label="支付宝支付" value="支付宝支付"></el-option>
-                    <el-option label="对公账户" value="对公账户"></el-option>
-                  </el-select>
-                </el-form-item>
+              <el-form-item label="付款方式：" prop="paymentTerm">
+                <el-select v-model="ModalsForm.paymentTerm" placeholder="请选择付款方式">
+                  <el-option label="微信支付" value="微信支付"></el-option>
+                  <el-option label="支付宝支付" value="支付宝支付"></el-option>
+                  <el-option label="对公账户" value="对公账户"></el-option>
+                </el-select>
+              </el-form-item>
 
-                <div class="Modals_two">
-                  <span class="demonstration">附加说明：</span>
-                  <el-input v-model="ModalsForm.addition"></el-input>
+              <el-form-item label="附加说明：">
+                <el-input v-model="ModalsForm.addition" style="width:400px"></el-input>
+              </el-form-item>
 
-                  <span class="demonstration">摘要：</span>
-                  <el-input v-model="ModalsForm.summary"></el-input>
-                </div>
+              <el-form-item class="demonstration" label="摘要:">
+                <el-input v-model="ModalsForm.summary" style="width:400px" type="textarea"></el-input>
+              </el-form-item>
 
-                <el-form-item class="detail_two" label="收取金额：¥ " prop="amount">
-                  <el-input v-model="ModalsForm.amount"></el-input>
-                </el-form-item>
+              <el-form-item class="payment_two" label="收取金额：¥ " prop="amount">
+                <el-input v-model="ModalsForm.amount" style="width:330px"></el-input>
+              </el-form-item>
 
-                <br>
-                <br>
-                <br>
-                <br>
-                <el-form-item class="detail_two">
-                  <el-button type="primary" @click="submitEdit('ModalsForm')">确认修改</el-button>
-                  <el-button @click="resetEdit('ModalsForm')">重置</el-button>
-                </el-form-item>
-              </el-form>
-            </el-dialog>
-          </div>
+              <br>
+              <br>
+              <br>
+              <br>
+              <el-form-item class="payment_two">
+                <el-button type="primary" @click="onSubmitEdit()">确认修改</el-button>
+                <el-button @click="resetEdit('ModalsForm')">重置</el-button>
+              </el-form-item>
+            </el-form>
+          </el-dialog>
+
           <!-- ====================================== -->
         </el-tab-pane>
 
@@ -258,7 +260,17 @@ export default {
       },
 
       //编辑实体
-      ModalsForm: {},
+      ModalsForm: {
+        // orderId: "",
+        id: "",
+        paymentTerm: "",
+        payer: "",
+        payee: "",
+        paymentTime:'',
+        addition: "",
+        summary: "",
+        amount: ""
+      },
 
       //数据校验
       rules: {
@@ -357,25 +369,57 @@ export default {
     //提交按钮
     onSubmitButton() {
       var oid = this.addFormTargetOrderId;
-      axios
-        .post(`payment?orderId=${oid}`, this.paymentForm)
-        .then(res => {
-          console.log(res);
-          this.loading = false;
-          this.loadData();
-        });
+      axios.post(`payment?orderId=${oid}`, this.paymentForm).then(res => {
+        console.log(res);
+        this.loading = false;
+        this.loadData();
+      });
     },
 
+    //提交编辑后信息
+    onSubmitEdit(){
+      var pid=this.ModalsForm.id;
+      axios.post(`payment/${pid}`,this.ModalsForm).then(res=>{
+        this.editFormVisible=false;
+        this.loadData();
+
+      })
+    },
+    //删除按钮
+    onDeleteButton(row){
+      var pid=row.id;
+      axios.delete(`payment/${pid}`).then(res=>{
+        this.loadData();
+      })
+    },
     // 重置入款单增添数据表单
     resetForm(formName) {
       this.$refs[formName].resetFields();
       //重置下新增表单数据，避免双向绑定
       this.initForm();
+    },
+    //编辑数据
+    editDataButton(row) {
+      this.editFormVisible = true;
+      this.ModalsForm={
+        id:row.id,
+        paymentTerm: row.paymentTerm,
+        payer: row.payer,
+        payee: row.payee,
+        paymentTime: row.paymentTime,
+        addition: row.addition,
+        summary: row.summary,
+        amount: row.amount
+      }
     }
   },
+
   filters: {
     dateFrm: function(el) {
       return moment(el).format("YYYY-MM-DD HH:mm:ss");
+    },
+    dateFrm2: function(el) {
+      return moment(el).format("YYYY-MM-DD");
     }
   },
   mounted() {
@@ -393,7 +437,7 @@ a {
   text-decoration: none;
 }
 
-.detail {
+.payment {
   width: 1200px;
   /*margin-left: 200px;*/
   /*background-color: #ccc;*/
@@ -402,59 +446,59 @@ a {
 /*-------------------入款单----------------------------*/
 
 /*日期*/
-.detail .detail_top {
+.payment .payment_top {
   width: 100%;
   height: 40px;
   /*margin-bottom: 26px;*/
   /*background-color: red;*/
 }
 
-.detail .block {
+.payment .block {
   float: left;
   margin-left: 30px;
 }
 
-.detail .el-tabs__header {
+.payment .el-tabs__header {
   padding-left: 6%;
 }
 
 /*单据编号*/
-.detail .listnum {
+.payment .listnum {
   float: left;
   margin-left: 22px;
 }
 
-.detail .listnum .el-input {
+.payment .listnum .el-input {
   width: 72%;
 }
 
 /*付款单位、经手人等信息*/
-.detail .detail_content {
+.payment .payment_content {
   width: 100%;
   height: 40px;
   margin-top: 46px;
   margin-bottom: 30px;
 }
 
-.detail .detail_news .el-form-item {
+.payment .payment_news .el-form-item {
   float: left;
 }
 
-.detail .detail_news .detail_one {
+.payment .payment_news .payment_one {
   margin-left: 30px;
   margin-bottom: 30px;
 }
 
-.detail .detail_news .detail_one .el-input {
+.payment .payment_news .payment_one .el-input {
   width: 16%;
 }
 
-.detail .detail_news .detail_two {
+.payment .payment_news .payment_two {
   margin-left: 20px;
 }
 
 /*记录表格*/
-.detail .detailTable {
+.payment .paymentTable {
   width: 100%;
   margin-top: 70px;
   height: 100%;
@@ -463,29 +507,29 @@ a {
 }
 
 /*编辑弹出框*/
-.detail .Modals .block {
+.payment .Modals .block {
   width: 100%;
   margin-bottom: 20px;
 }
 
-.detail .Modals .Modals_one {
+.payment .Modals .Modals_one {
   margin-top: 70px;
 }
 
-.detail .Modals .Modals_two {
+.payment .Modals .Modals_two {
   margin-left: 20px;
 }
 
-.detail .Modals .Modals_two .el-input {
+.payment .Modals .Modals_two .el-input {
   width: 86%;
   margin-bottom: 27px;
 }
 
-.detail .Modals .el-form-item__content {
+.payment .Modals .el-form-item__content {
   z-index: 1;
 }
 
-.detail .Modals .el-date-editor.el-input {
+.payment .Modals .el-date-editor.el-input {
   z-index: 2;
 }
 
