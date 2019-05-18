@@ -1,23 +1,23 @@
 <template>
   <div class="accounting">
-    <div class="jilu">
+    <div class="detail">
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
         <el-tab-pane label="入款单" name="first">
-          <div class="jilu_news">
+          <div class="detail_news">
             <el-form
-              :model="ruleForm"
+              :model="paymentForm"
               :rules="rules"
-              ref="ruleForm"
+              ref="paymentForm"
               label-width="100px"
-              class="demo-ruleForm"
+              class="demo-paymentForm"
             >
               <!-- 日期 -->
-              <div class="jilu_top">
+              <div class="detail_top">
                 <div class="block">
                   <span class="demonstration">录入时间：</span>
                   <el-date-picker
                     @change="setDate"
-                    v-model="ruleForm.paymenttime"
+                    v-model="paymentForm.paymenttime"
                     type="date"
                     placeholder="选择日期"
                     :picker-options="pickerOptions0"
@@ -25,23 +25,23 @@
                 </div>
 
                 <el-form-item label="单据编号：" prop="orderId">
-                  <el-input v-model="ruleForm.orderId"></el-input>
+                  <el-input v-model="paymentForm.orderId"></el-input>
                 </el-form-item>
               </div>
 
               <!-- 付款单位、经手人等信息 -->
 
-              <div class="jilu_content">
+              <div class="detail_content">
                 <el-form-item label="付款方：" prop="pay_name">
-                  <el-input v-model="ruleForm.pay_name"></el-input>
+                  <el-input v-model="paymentForm.pay_name"></el-input>
                 </el-form-item>
 
                 <el-form-item label="经手人：" prop="do_name">
-                  <el-input v-model="ruleForm.do_name"></el-input>
+                  <el-input v-model="paymentForm.do_name"></el-input>
                 </el-form-item>
 
                 <el-form-item label="付款方式" prop>
-                  <el-select v-model="ruleForm.paymentterm" placeholder="请选择付款方式">
+                  <el-select v-model="paymentForm.paymentterm" placeholder="请选择付款方式">
                     <el-option label="微信支付" value="微信支付"></el-option>
                     <el-option label="支付宝支付" value="支付宝支付"></el-option>
                     <el-option label="对公账户" value="对公账户"></el-option>
@@ -49,29 +49,29 @@
                 </el-form-item>
               </div>
 
-              <div class="jilu_one">
+              <div class="detail_one">
                 <span class="demonstration">附加说明：</span>
-                <el-input v-model="ruleForm.jilu_add"></el-input>
+                <el-input v-model="paymentForm.detail_add"></el-input>
 
                 <span class="demonstration">摘要：</span>
-                <el-input v-model="ruleForm.jilu_part"></el-input>
+                <el-input v-model="paymentForm.detail_part"></el-input>
               </div>
 
-              <el-form-item class="jilu_two" label="收取金额：¥ " prop="jilu_get">
-                <el-input v-model="ruleForm.jilu_get"></el-input>
+              <el-form-item class="detail_two" label="收取金额：¥ " prop="detail_get">
+                <el-input v-model="paymentForm.detail_get"></el-input>
               </el-form-item>
               <br>
               <br>
               <br>
               <br>
-              <el-form-item class="jilu_two">
-                <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
-                <el-button @click="resetForm('ruleForm')">重置</el-button>
+              <el-form-item class="detail_two">
+                <el-button type="primary" @click="submitForm('paymentForm')">提交</el-button>
+                <el-button @click="resetForm('paymentForm')">重置</el-button>
               </el-form-item>
             </el-form>
           </div>
 
-          <div class="jilu_table">
+          <div class="detail_table">
             <el-table :data="tableData" border style="width: 100%" max-height="600">
               <!--                   <el-table-column prop="paymenttime" label="录入时间" sortable width="130">
               </el-table-column>-->
@@ -82,9 +82,9 @@
               <el-table-column prop="pay_name" label="付款方" width="110"></el-table-column>
               <el-table-column prop="do_name" label="经手人" width="110"></el-table-column>
               <el-table-column prop="paymentterm" label="部门" width="120"></el-table-column>
-              <el-table-column prop="jilu_add" label="附加说明" width="170"></el-table-column>
-              <el-table-column prop="jilu_part" label="摘要" width="170"></el-table-column>
-              <el-table-column prop="jilu_get" label="收取金额(¥)" width="110"></el-table-column>
+              <el-table-column prop="detail_add" label="附加说明" width="170"></el-table-column>
+              <el-table-column prop="detail_part" label="摘要" width="170"></el-table-column>
+              <el-table-column prop="detail_get" label="收取金额(¥)" width="110"></el-table-column>
               <el-table-column fixed="right" label="操作" width="160">
                 <template slot-scope="scope">
                   <el-button size="small" @click="editData(scope.row,scope.$index)">编辑</el-button>
@@ -119,7 +119,7 @@
                 class="demo-ModalsForm"
               >
                 <!-- 日期 -->
-                <div class="jilu_top">
+                <div class="detail_top">
                   <div class="block">
                     <span class="demonstration">录入时间：</span>
                     <el-date-picker
@@ -156,21 +156,21 @@
 
                 <div class="Modals_two">
                   <span class="demonstration">附加说明：</span>
-                  <el-input v-model="ModalsForm.jilu_add"></el-input>
+                  <el-input v-model="ModalsForm.detail_add"></el-input>
 
                   <span class="demonstration">摘要：</span>
-                  <el-input v-model="ModalsForm.jilu_part"></el-input>
+                  <el-input v-model="ModalsForm.detail_part"></el-input>
                 </div>
 
-                <el-form-item class="jilu_two" label="收取金额：¥ " prop="jilu_get">
-                  <el-input v-model="ModalsForm.jilu_get"></el-input>
+                <el-form-item class="detail_two" label="收取金额：¥ " prop="detail_get">
+                  <el-input v-model="ModalsForm.detail_get"></el-input>
                 </el-form-item>
 
                 <br>
                 <br>
                 <br>
                 <br>
-                <el-form-item class="jilu_two">
+                <el-form-item class="detail_two">
                   <el-button type="primary" @click="submitEdit('ModalsForm')">确认修改</el-button>
                   <el-button @click="resetEdit('ModalsForm')">重置</el-button>
                 </el-form-item>
@@ -183,7 +183,7 @@
         <!-- ============================================== 出款单 =================================================== -->
 
         <el-tab-pane label="出款单" name="second">
-          <div class="jilu_news">
+          <div class="detail_news">
             <el-form
               :model="paragraphList"
               :rules="rules"
@@ -192,7 +192,7 @@
               class="demo-paragraphList"
             >
               <!-- 日期 -->
-              <div class="jilu_top">
+              <div class="detail_top">
                 <div class="block">
                   <span class="demonstration">录入时间：</span>
                   <el-date-picker
@@ -210,7 +210,7 @@
                 </el-form-item>
               </div>
 
-              <div class="jilu_content">
+              <div class="detail_content">
                 <!-- 付款单位、经手人等信息 -->
                 <el-form-item label="支出人：" prop="pay_name">
                   <el-input v-model="paragraphList.pay_name"></el-input>
@@ -229,30 +229,30 @@
                 </el-form-item>
               </div>
 
-              <div class="jilu_one">
+              <div class="detail_one">
                 <span class="demonstration">附加说明：</span>
-                <el-input v-model="paragraphList.jilu_add"></el-input>
+                <el-input v-model="paragraphList.detail_add"></el-input>
 
                 <span class="demonstration">摘要：</span>
-                <el-input v-model="paragraphList.jilu_part"></el-input>
+                <el-input v-model="paragraphList.detail_part"></el-input>
               </div>
 
-              <el-form-item class="jilu_two" label="支出金额：¥ " prop="jilu_charge">
-                <el-input v-model="paragraphList.jilu_charge"></el-input>
+              <el-form-item class="detail_two" label="支出金额：¥ " prop="detail_charge">
+                <el-input v-model="paragraphList.detail_charge"></el-input>
               </el-form-item>
 
               <br>
               <br>
               <br>
               <br>
-              <el-form-item class="jilu_two">
+              <el-form-item class="detail_two">
                 <el-button type="primary" @click="submitForm2('paragraphList')">提交</el-button>
                 <el-button @click="resetForm2('paragraphList')">重置</el-button>
               </el-form-item>
             </el-form>
           </div>
 
-          <div class="jilu_table">
+          <div class="detail_table">
             <el-table :data="tableData2" border style="width: 100%" max-height="600">
               <el-table-column prop="paymenttime" label="录入时间" sortable width="130">
                 <template slot-scope="scope">{{scope.row.paymenttime}}</template>
@@ -261,9 +261,9 @@
               <el-table-column prop="pay_name" label="支出人" width="110"></el-table-column>
               <el-table-column prop="do_name" label="收款方" width="110"></el-table-column>
               <el-table-column prop="paymentterm" label="部门" width="120"></el-table-column>
-              <el-table-column prop="jilu_add" label="附加说明" width="180"></el-table-column>
-              <el-table-column prop="jilu_part" label="摘要" width="170"></el-table-column>
-              <el-table-column prop="jilu_charge" label="支出金额(¥)" width="120"></el-table-column>
+              <el-table-column prop="detail_add" label="附加说明" width="180"></el-table-column>
+              <el-table-column prop="detail_part" label="摘要" width="170"></el-table-column>
+              <el-table-column prop="detail_charge" label="支出金额(¥)" width="120"></el-table-column>
               <el-table-column fixed="right" label="操作" width="150">
                 <template slot-scope="scope">
                   <el-button size="small" @click="editData2(scope.row,scope.$index)">编辑</el-button>
@@ -295,7 +295,7 @@
                 class="demo-ModalsForm"
               >
                 <!-- 日期 -->
-                <div class="jilu_top">
+                <div class="detail_top">
                   <div class="block">
                     <span class="demonstration">录入时间：</span>
                     <el-date-picker
@@ -332,21 +332,21 @@
 
                 <div class="Modals_two">
                   <span class="demonstration">附加说明：</span>
-                  <el-input v-model="ModalsForm2.jilu_add"></el-input>
+                  <el-input v-model="ModalsForm2.detail_add"></el-input>
 
                   <span class="demonstration">摘要：</span>
-                  <el-input v-model="ModalsForm2.jilu_part"></el-input>
+                  <el-input v-model="ModalsForm2.detail_part"></el-input>
                 </div>
 
-                <el-form-item class="jilu_two" label="收取金额：¥ " prop="jilu_charge">
-                  <el-input v-model="ModalsForm2.jilu_charge"></el-input>
+                <el-form-item class="detail_two" label="收取金额：¥ " prop="detail_charge">
+                  <el-input v-model="ModalsForm2.detail_charge"></el-input>
                 </el-form-item>
 
                 <br>
                 <br>
                 <br>
                 <br>
-                <el-form-item class="jilu_two">
+                <el-form-item class="detail_two">
                   <el-button type="primary" @click="submitEdit2('ModalsForm2')">确认修改</el-button>
                   <el-button @click="resetEdit2('ModalsForm2')">重置</el-button>
                 </el-form-item>
@@ -365,7 +365,7 @@
 
 
 <script>
-// import {api} from '@/global/api'
+import axios from 'axios'
 export default {
   data() {
     return {
@@ -381,15 +381,15 @@ export default {
       },
 
       //入款单增添数据表单
-      ruleForm: {
+      paymentForm: {
         paymenttime: "",
         orderId: "",
         pay_name: "",
         do_name: "",
         paymentterm: "",
-        jilu_add: "",
-        jilu_part: "",
-        jilu_get: ""
+        detail_add: "",
+        detail_part: "",
+        detail_get: ""
       },
 
       //入款单表格数据
@@ -400,9 +400,9 @@ export default {
           pay_name: "",
           do_name: "",
           paymentterm: "",
-          jilu_add: "",
-          jilu_part: "",
-          jilu_get: 0
+          detail_add: "",
+          detail_part: "",
+          detail_get: 0
         }
       ],
 
@@ -415,9 +415,9 @@ export default {
         pay_name: "",
         do_name: "",
         paymentterm: "",
-        jilu_add: "",
-        jilu_part: "",
-        jilu_get: ""
+        detail_add: "",
+        detail_part: "",
+        detail_get: ""
       },
       formLabelWidth: "120px",
       //----------------------
@@ -441,7 +441,7 @@ export default {
         paymentterm: [
           { required: true, message: "请选择付款方式", trigger: "blur" }
         ],
-        jilu_get: [
+        detail_get: [
           // { required: true, message: '收取金额不能为空', trigger: 'blur'},
           // { value!=^[0-9]*$ , message: '收取金额必须为数字值'}
 
@@ -461,7 +461,7 @@ export default {
           }
         ],
 
-        jilu_charge: [
+        detail_charge: [
           // { required: true, message: '收取金额不能为空', trigger: 'blur'},
           // { value!=^[0-9]*$ , message: '收取金额必须为数字值'}
 
@@ -490,9 +490,9 @@ export default {
         pay_name: "",
         do_name: "",
         paymentterm: "",
-        jilu_add: "",
-        jilu_part: "",
-        jilu_charge: ""
+        detail_add: "",
+        detail_part: "",
+        detail_charge: ""
       },
 
       //出款单表格数据
@@ -503,9 +503,9 @@ export default {
           pay_name: "",
           do_name: "",
           paymentterm: "",
-          jilu_add: "",
-          jilu_part: "",
-          jilu_charge: 0
+          detail_add: "",
+          detail_part: "",
+          detail_charge: 0
         }
       ],
 
@@ -516,9 +516,9 @@ export default {
         pay_name: "",
         do_name: "",
         paymentterm: "",
-        jilu_add: "",
-        jilu_part: "",
-        jilu_charge: ""
+        detail_add: "",
+        detail_part: "",
+        detail_charge: ""
       },
 
       dialogFormVisible2: false
@@ -571,7 +571,7 @@ export default {
     // @change 时间格式转换
     //入款单增添数据表单时间
     setDate(val) {
-      this.ruleForm.paymenttime = val;
+      this.paymentForm.paymenttime = val;
       // this.tableData.paymenttime=val;
       // this.ModalsForm.paymenttime=val;
     },
@@ -585,18 +585,18 @@ export default {
       // console.log(this.tableData.paymenttime)
     },
 
-    //重置新增表单ruleForm
+    //重置新增表单paymentForm
     initForm() {
       let vm = this;
-      vm.ruleForm = {
+      vm.paymentForm = {
         paymenttime: "",
         orderId: "",
         pay_name: "",
         do_name: "",
         paymentterm: "",
-        jilu_add: "",
-        jilu_part: "",
-        jilu_get: ""
+        detail_add: "",
+        detail_part: "",
+        detail_get: ""
       };
     },
 
@@ -606,11 +606,11 @@ export default {
         if (valid) {
           var vm = this;
           var flag = 0;
-          console.log("新增入参：", vm.ruleForm);
+          console.log("新增入参：", vm.paymentForm);
 
           // 判断单据编号是否重复
           for (var addlist of vm.tableData) {
-            if (vm.ruleForm.orderId == addlist.orderId) {
+            if (vm.paymentForm.orderId == addlist.orderId) {
               alert("单据编号已存在！请重新输入！");
               flag = 1;
               return flag;
@@ -620,7 +620,7 @@ export default {
 
           if (flag != 1) {
             //这里作演示用，正式新增 请提交到接口
-            vm.tableData.push(vm.ruleForm);
+            vm.tableData.push(vm.paymentForm);
             console.log("新增后", vm.tableData);
 
             // this.dialogFormVisible = false;
@@ -698,9 +698,9 @@ export default {
         pay_name: "",
         do_name: "",
         paymentterm: "",
-        jilu_add: "",
-        jilu_part: "",
-        jilu_get: ""
+        detail_add: "",
+        detail_part: "",
+        detail_get: ""
       };
     },
 
@@ -734,9 +734,9 @@ export default {
         pay_name: "",
         do_name: "",
         paymentterm: "",
-        jilu_add: "",
-        jilu_part: "",
-        jilu_charge: ""
+        detail_add: "",
+        detail_part: "",
+        detail_charge: ""
       };
     },
 
@@ -827,9 +827,9 @@ export default {
         pay_name: "",
         do_name: "",
         paymentterm: "",
-        jilu_add: "",
-        jilu_part: "",
-        jilu_charge: ""
+        detail_add: "",
+        detail_part: "",
+        detail_charge: ""
       };
     },
 
@@ -859,7 +859,7 @@ a {
   text-decoration: none;
 }
 
-.jilu {
+.detail {
   width: 1200px;
   /*margin-left: 200px;*/
   /*background-color: #ccc;*/
@@ -868,59 +868,59 @@ a {
 /*-------------------入款单----------------------------*/
 
 /*日期*/
-.jilu .jilu_top {
+.detail .detail_top {
   width: 100%;
   height: 40px;
   /*margin-bottom: 26px;*/
   /*background-color: red;*/
 }
 
-.jilu .block {
+.detail .block {
   float: left;
   margin-left: 30px;
 }
 
-.jilu .el-tabs__header {
+.detail .el-tabs__header {
   padding-left: 6%;
 }
 
 /*单据编号*/
-.jilu .listnum {
+.detail .listnum {
   float: left;
   margin-left: 22px;
 }
 
-.jilu .listnum .el-input {
+.detail .listnum .el-input {
   width: 72%;
 }
 
 /*付款单位、经手人等信息*/
-.jilu .jilu_content {
+.detail .detail_content {
   width: 100%;
   height: 40px;
   margin-top: 46px;
   margin-bottom: 30px;
 }
 
-.jilu .jilu_news .el-form-item {
+.detail .detail_news .el-form-item {
   float: left;
 }
 
-.jilu .jilu_news .jilu_one {
+.detail .detail_news .detail_one {
   margin-left: 30px;
   margin-bottom: 30px;
 }
 
-.jilu .jilu_news .jilu_one .el-input {
+.detail .detail_news .detail_one .el-input {
   width: 16%;
 }
 
-.jilu .jilu_news .jilu_two {
+.detail .detail_news .detail_two {
   margin-left: 20px;
 }
 
 /*记录表格*/
-.jilu .jilu_table {
+.detail .detail_table {
   width: 100%;
   margin-top: 70px;
   height: 100%;
@@ -929,29 +929,29 @@ a {
 }
 
 /*编辑弹出框*/
-.jilu .Modals .block {
+.detail .Modals .block {
   width: 100%;
   margin-bottom: 20px;
 }
 
-.jilu .Modals .Modals_one {
+.detail .Modals .Modals_one {
   margin-top: 70px;
 }
 
-.jilu .Modals .Modals_two {
+.detail .Modals .Modals_two {
   margin-left: 20px;
 }
 
-.jilu .Modals .Modals_two .el-input {
+.detail .Modals .Modals_two .el-input {
   width: 86%;
   margin-bottom: 27px;
 }
 
-.jilu .Modals .el-form-item__content {
+.detail .Modals .el-form-item__content {
   z-index: 1;
 }
 
-.jilu .Modals .el-date-editor.el-input {
+.detail .Modals .el-date-editor.el-input {
   z-index: 2;
 }
 

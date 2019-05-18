@@ -28,26 +28,26 @@
     </el-row>
     <!-- 编辑订单信息页面-->
     <el-dialog title="修改订单信息" :visible.sync="editFormVisible" :close-on-click-modal="false">
-      <el-form model="editForm" label-width="80px" ref="editForm">
+      <el-form model="editForm" label-width="80px">
         <el-form-item label="经办人">
           <el-input v-model="editForm.handlerName" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="订单状态">
-          <el-radio-group v-model="editForm.status">
-            <el-radio class="radio" :label="1">进行中</el-radio>
-            <el-radio class="radio" :label="-1">未开始</el-radio>
-            <el-radio class="radio" :label="0">已结束</el-radio>
+          <el-radio-group v-model="editForm.status" size="medium">
+            <el-radio-button label="CREATED">未开始</el-radio-button>
+            <el-radio-button label="IN_PROGRESS">进行中</el-radio-button>
+            <el-radio-button label="FINISHED">已结束</el-radio-button>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="订单标题">
-          <el-input v-model="order.title"/>
+          <el-input v-model="editForm.title"/>
         </el-form-item>
         <el-form-item label="订单备注">
-          <el-input type="textarea"/>
+          <el-input v-model="editForm.comments" type="textarea"/>
         </el-form-item>
         <el-row>
-          <el-button type="primary">提交</el-button>
-          <el-button>取消</el-button>
+          <el-button type="primary" @click="onSubmitEditForm">提交</el-button>
+          <el-button @click="editFormVisible = false">取消</el-button>
         </el-row>
       </el-form>
     </el-dialog>
@@ -196,7 +196,7 @@
 </template>
 
 <script>
-import moment from 'moment';
+import moment from "moment";
 import axios from "axios";
 import { truncate, rename } from "fs";
 export default {
@@ -212,17 +212,21 @@ export default {
       editFormVisible: false, //编辑界面是否显示
       editLoading: false,
       editForm: {
-        orderId: "",
+        id: "",
+        handlerName: "",
         status: "",
         title: "",
-        orderId: ""
+        comments: "",
+        orderId:''
       },
+
       order: {
         orderId: "",
         status: "",
         title: "",
         orderId: ""
       },
+
       orderTable: [],
       currentPage: 1, //当前页
       pageSize: 10, //显示条数
@@ -231,22 +235,48 @@ export default {
 
       dialogData: {
         order: {
-          orderId: '',
-          orderStatus:'',
-          title:''
+          orderId: "",
+          orderStatus: "",
+          title: ""
         },
-        customer:{
-          bankName:''
+        customer: {
+          bankName: ""
         }
       }
     };
   },
   methods: {
+    //编辑
     editOrder: function(row) {
       console.log(row);
+      this.editForm = {
+        id: row.id,
+        orderId:row.orderId,
+        handlerName: row.handlerName,
+        status: row.status,
+        title: row.title,
+        comments: row.comments
+      };
+      console.log(this.editForm);
       this.editFormVisible = true;
       // this.editForm = Object.assign({}, row);
     },
+
+    //提交编辑更改后表单
+    onSubmitEditForm() {
+      const id = this.editForm.orderId;
+      this.$axios({
+        method: "post",
+        url: "/order/" + id,
+        data: this.editForm
+      }).then(res => {
+        this.editFormVisible = false;
+        this.loadData();
+      });
+      // axios.post
+      
+    },
+
     //搜索
     onSearchButton() {
       console.log("fsfsf");
@@ -258,7 +288,6 @@ export default {
     },
     toAddOrder() {
       this.$router.push({ name: "AddOrder" });
-      
     },
 
     loadData() {
@@ -293,15 +322,14 @@ export default {
     //查看订单详情
     lookOrder(row) {
       console.log(row);
-      
-      
-      const oid=row.orderId;
+
+      const oid = row.orderId;
       // alert(oid);
-      axios.get(`order/${oid}`).then(res=>{
-        console.log(res)
+      axios.get(`order/${oid}`).then(res => {
+        console.log(res);
         this.dialogData = res.data;
         this.orderDescVisible = true;
-      })
+      });
     }
   },
 
@@ -315,8 +343,8 @@ export default {
       } else val == "FINISHED";
       return "已结束";
     },
-    dateFrm:function(el){
-      return moment(el).format("YYYY-MM-DD HH:mm:ss")
+    dateFrm: function(el) {
+      return moment(el).format("YYYY-MM-DD HH:mm:ss");
     }
   },
   mounted() {

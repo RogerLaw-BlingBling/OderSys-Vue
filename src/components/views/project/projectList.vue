@@ -65,7 +65,7 @@
         </el-form-item>
         <el-form-item label="订单列表">
           <el-select
-            v-model="selectedOrder"
+            v-model="addFormTargetOrderId"
             value-key="id"
             filterable
             remote
@@ -73,9 +73,14 @@
             :remote-method="remoteMethod"
             style="width:360px"
           >
-            <el-option v-for="item in options" :key="item.id" :label="item.title" :value="item">
+            <el-option
+              v-for="item in options"
+              :key="item.id"
+              :label="item.title"
+              :value="item.orderId"
+            >
               <!-- <span style="float: left">{{ item.title }}</span> -->
-              <!-- <span style="float: right; color: #8492a6; font-size: 13px">{{ item.value }}</span> -->
+              <!-- <span style="float: right; color: #8492a6; font-size: 13px">{{ item.id }}</span> -->
             </el-option>
           </el-select>
         </el-form-item>
@@ -133,7 +138,7 @@
 <script>
 import moment from "moment";
 import axios from "axios";
-import { connect } from 'net';
+import { connect } from "net";
 export default {
   data() {
     return {
@@ -169,8 +174,7 @@ export default {
         status: "",
         beginTime: "",
         endTime: "",
-        duration: "",
-        contactPerson: ""
+        duration: ""
       },
 
       //新增界面
@@ -183,15 +187,14 @@ export default {
       },
 
       //编辑界面数据
+      addFormTargetOrderId: "",
       addForm: {
-        orderId: "",
+        // orderId: "",
         projectName: "",
-        status: "",
         beginTime: "",
         endTime: "",
-        duration: "",
+        duration: ""
         // contactPerson: "",
-        filelist: ""
       }
     };
   },
@@ -234,7 +237,7 @@ export default {
       axios.get("/order?size=20&sort=createTime,desc").then(res => {
         this.options = res.data.content;
         // this.addForm.orderId=res.data.orderId;
-        console.log(orderId);
+        // console.log(orderId);
       });
     },
 
@@ -275,8 +278,10 @@ export default {
 
     //编辑提交
     onEditSubmit(row) {
-      axios.post(`project?id=${this.editForm.id}`, this.editForm).then(res => {
-        console.log(row.id);
+      axios.post(`project/${this.editForm.id}`, this.editForm).then(res => {
+        // console.log(row.id);
+        this.editFormVisible = false;
+        this.loadData();
       });
     },
     handleSizeChange: function(val) {
@@ -293,14 +298,15 @@ export default {
       this.loadData();
     },
 
-    //新增
+    //新增工程
     onSubmitProject() {
       // const orderId = this.selectedOrder.id;
-      const orderId = this.selectedOrder.orderId;
+      const oid = this.addFormTargetOrderId;
       axios
-        .post(`/project?orderId=${orderId}`, this.addForm)
+        .post(`/project?orderId=${oid}`, this.addForm)
         .then(res => {
           this.addFormVisible = false;
+          this.loadData();
         })
         .catch();
     },

@@ -12,7 +12,7 @@ import AddOrder from '@/components/views/order/addOrder.vue'
 import ProjectList from '@/components/views/project/projectList.vue'
 import CustomerList from '@/components/views/customer/customerList.vue'
 // import AddCustomer from '@/components/views/addCustomer/addCustomer.vue'
-import AccountingDetail from '@/components/views/finance/accountingDetail.vue'
+import AccountingDetail from '@/components/views/finance/paymentInfo.vue'
 import BusinessStatics from '@/components/views/businessStatistics/businessStatistics.vue'
 import DemandInfo from '@/components/views/project/demandInfo.vue'
 
