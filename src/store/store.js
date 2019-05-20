@@ -3,7 +3,6 @@
  */
 import Vuex from 'vuex'
 import Vue from 'vue'
-import * as types from './types'
 
 Vue.use(Vuex);
 export default new Vuex.Store({
@@ -16,6 +15,10 @@ export default new Vuex.Store({
             state.user = data;
             state.isLogin = (data != null && data != {})
         },
+        userLogout(state) {
+            state.user = {}
+            state.isLogin = false
+        }
         // [types.LOGOUT]: (state) => {
         //     localStorage.removeItem('token');
         //     state.token = null

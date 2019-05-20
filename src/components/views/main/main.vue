@@ -15,15 +15,15 @@
               </div>
             </el-col>
             <el-col :span="4" class="userinfo">
-              <el-dropdown trigger="hover">
+              <el-dropdown trigger="hover" @command="handleUserDropdown">
                 <span class="el-dropdown-link userinfo-inner">
-                  <img :src="0">
+                  <img src="../../../assets/logo.png">
                   {{username}}
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item>我的消息</el-dropdown-item>
-                  <el-dropdown-item>设置</el-dropdown-item>
-                  <el-dropdown-item divided @click="logout()">退出登录</el-dropdown-item>
+                  <el-dropdown-item command='myMessage'>我的消息</el-dropdown-item>
+                  <el-dropdown-item command='mySettings'>设置</el-dropdown-item>
+                  <el-dropdown-item command='logout'>退出登录</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
             </el-col>

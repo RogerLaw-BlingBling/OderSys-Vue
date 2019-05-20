@@ -1,51 +1,65 @@
+import store from '@/store/store.js'
+import axios from 'axios';
+
 export default {
-  data () {
+  data() {
     return {
       sysName: 'InttersTech',
-      collapsed: false,
-      username: ''
+      collapsed: false
     }
   },
   methods: {
-    //注销登录
-    logout: function () {
-      
+    handleUserDropdown(command) {
+      console.log(command)
+      switch(command) {
+        case 'logout' : {
+          axios.post('/auth?logout',null).then((resp) => {
+            store.commit('userLogout')
+            this.$router.push({ name: 'Login' })
+          });
+        }
+        break;
+
+        default:
+          break;
+      }
     },
     // 折叠导航栏
-    collapse: function () {
+    collapse() {
       this.collapsed = !this.collapsed
     },
-    showMenu (i, status) {
+    showMenu(i, status) {
       this.$refs.menuCollapsed.getElementsByClassName('submenu-hook-' + i)[0].style.display = status ? 'block' : 'none'
     },
-    handleOpen () {
+    handleOpen() {
       // console.log('handleopen');
     },
-    handleClose () {
+    handleClose() {
       // console.log('handleclose');
     },
-    toProceedingProject () {
+    toProceedingProject() {
+      console.log("这是进行中的项目")
       this.$router.push({ name: 'ProceedingProject' })
     },
-    toDemandInfo () {
+    toDemandInfo() {
       this.$router.push({ name: 'DemandInfo' })
     },
-    toOrderList () {
+    toOrderList() {
       this.$router.push({ name: 'OrderList' })
     },
-    toProjectList () {
+    toProjectList() {
       this.$router.push({ name: 'ProjectList' })
     },
-    toCustomerList () {
+    toCustomerList() {
       this.$router.push({ name: 'CustomerList' })
     },
     // toAddContract () {
     //   this.$router.push({ name: 'AddContract' })
     // },
-    toAccountingDetail () {
+    toAccountingDetail() {
       this.$router.push({ name: 'AccountingDetail' })
     },
-    toBusinessStatistics () {
+    toBusinessStatistics() {
       // eslint-disable-next-line no-unused-expressions
       this.$router.push({ name: 'BusinessStatistics' })
     }
@@ -53,9 +67,12 @@ export default {
   computed: {
     defaultActive: function () {
       return this.$route.path.replace('/', '')
+    },
+    username() {
+      return store.state.user.username
     }
   },
-  created () {
+  created() {
     // this.$axios({
     // method: 'post',
     //   url: '/user/12345',

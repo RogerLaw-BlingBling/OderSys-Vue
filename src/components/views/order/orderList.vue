@@ -9,7 +9,7 @@
                 <el-input v-model="searchForm.title" placeholder="订单标题" style="width:230px"></el-input>
               </el-form-item>
               <el-form-item prop="status">
-                <el-select v-model="order.status" style="width:110px">
+                <el-select v-model="searchForm.status" style="width:110px">
                   <el-option label="未开始" value="CREATED"></el-option>
                   <el-option label="进行中" value="IN_PROGRESS"></el-option>
                   <el-option label="已结束" value="FINISHED"></el-option>
@@ -33,7 +33,7 @@
           <el-input v-model="editForm.handlerName" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="订单状态">
-          <el-radio-group v-model="editForm.status" size="medium">
+          <el-radio-group v-model="editForm.orderStatus" size="medium">
             <el-radio-button label="CREATED">未开始</el-radio-button>
             <el-radio-button label="IN_PROGRESS">进行中</el-radio-button>
             <el-radio-button label="FINISHED">已结束</el-radio-button>
@@ -198,12 +198,13 @@
 <script>
 import moment from "moment";
 import axios from "axios";
-import { truncate, rename } from "fs";
+import { truncate, rename, stat } from "fs";
 export default {
   data() {
     return {
       searchForm: {
-        title: ""
+        title: "",
+        status: ""
       },
       //查看订单详情
       orderDescVisible: false,
@@ -214,10 +215,10 @@ export default {
       editForm: {
         id: "",
         handlerName: "",
-        status: "",
+        orderStatus: "",
         title: "",
         comments: "",
-        orderId:''
+        orderId: ""
       },
 
       order: {
@@ -251,9 +252,9 @@ export default {
       console.log(row);
       this.editForm = {
         id: row.id,
-        orderId:row.orderId,
+        orderId: row.orderId,
         handlerName: row.handlerName,
-        status: row.status,
+        orderStatus: row.orderStatus,
         title: row.title,
         comments: row.comments
       };
@@ -274,17 +275,25 @@ export default {
         this.loadData();
       });
       // axios.post
-      
     },
 
     //搜索
     onSearchButton() {
-      console.log("fsfsf");
+      console.log(this.searchForm.status);
       var keyword = this.searchForm.title;
-      axios.get(`order?keyword=${keyword}`).then(res => {
+      var status = this.searchForm.status;
+
+      const keywordQuery = (keyword && keyword != "") ? `keyword=${keyword}` : ''
+      const stateQuery = (status && status != "") ? `&status=${status}` : ''
+
+      axios.get(`order?${keywordQuery}${stateQuery}`).then(res => {
         this.orderTable = res.data.content;
         this.total = res.data.totalElements;
       });
+      // axios.get(`order?status=${status}`).then(res => {
+      //   this.orderTable = res.data.content;
+      //   this.total = res.data.totalElements;
+      // });
     },
     toAddOrder() {
       this.$router.push({ name: "AddOrder" });

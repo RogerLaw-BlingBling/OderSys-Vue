@@ -88,7 +88,7 @@
           <div class="block">
             <!-- <span class="demonstration">起始日期时刻为 12:00:00</span> -->
             <el-date-picker
-              v-model="addForm.beginTime"
+              v-model="addForm.timeRange"
               type="datetimerange"
               start-placeholder="开始日期"
               end-placeholder="结束日期"
@@ -112,18 +112,18 @@
         <el-form-item label="工程名" prop="projectName">
           <el-input v-model="editForm.projectName" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="工程状态">
-          <el-radio-group v-model="editForm.status">
-            <el-radio class="radio" :label="1">进行中</el-radio>
-            <el-radio class="radio" :label="-1">未开始</el-radio>
-            <el-radio class="radio" :label="0">已交付</el-radio>
-          </el-radio-group>
+        <el-form-item label="工程状态:">
+          <el-select v-model="editForm.projectStatus" placeholder="请选择工程状态">
+            <el-option label="未开始" value="CREATED"></el-option>
+            <el-option label="进行中" value="IN_PROGRESS"></el-option>
+            <el-option label="已交付" value="FINISHED"></el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item label="项目时长">
+        <el-form-item label="项目时长:">
           <el-date-picker type="date" v-model="editForm.beginTime"></el-date-picker>---
           <el-date-picker type="date" v-model="editForm.endTime"></el-date-picker>
         </el-form-item>
-        <el-form-item label="预计工期">
+        <el-form-item label="预计工期:">
           <el-input v-model="editForm.duration" auto-complete="off" style="width:220px"></el-input>
         </el-form-item>
       </el-form>
@@ -171,7 +171,7 @@ export default {
       editForm: {
         id: "",
         projectName: "",
-        status: "",
+        projectStatus: "",
         beginTime: "",
         endTime: "",
         duration: ""
@@ -191,9 +191,8 @@ export default {
       addForm: {
         // orderId: "",
         projectName: "",
-        beginTime: "",
-        endTime: "",
-        duration: ""
+        timeRange: [],
+        duration: 0
         // contactPerson: "",
       }
     };
@@ -255,7 +254,8 @@ export default {
         projectName: row.projectName,
         duration: row.duration,
         beginTime: row.beginTime,
-        endTime: row.endTime
+        endTime: row.endTime,
+        projectStatus:row.projectStatus
       };
     },
 
@@ -303,7 +303,12 @@ export default {
       // const orderId = this.selectedOrder.id;
       const oid = this.addFormTargetOrderId;
       axios
-        .post(`/project?orderId=${oid}`, this.addForm)
+        .post(`/project?orderId=${oid}`, {
+          projectName : this.addForm.projectName,
+          beginTime : this.addForm.timeRange[0],
+          endTime : this.addForm.timeRange[1],
+          duration : this.addForm.duration
+        })
         .then(res => {
           this.addFormVisible = false;
           this.loadData();
@@ -334,6 +339,15 @@ export default {
   },
   mounted() {
     this.loadData();
+  },
+  watch : {
+    'addForm.timeRange'(){
+      if(this.addForm.timeRange.length < 2) return;
+      const startTime = this.addForm.timeRange[0]
+      const endTime = this.addForm.timeRange[1]
+
+      this.addForm.duration = moment(endTime).diff(moment(startTime),'day')
+    }
   }
 };
 </script>

@@ -11,10 +11,18 @@
             <el-table-column prop="projectStatus" label="项目状态" width="200">
               <template slot-scope="scope">{{scope.row.projectStatus | statusType}}</template>
             </el-table-column>
-            <el-table-column prop="duration" label="预计时间" width="200"></el-table-column>
-            <el-table-column prop="time_consuming" label="消耗时间" width="200"></el-table-column>
-            <el-table-column prop="remaining_time" label="剩余" width="200"></el-table-column>
-            <el-table-column prop="schedule" label="总进度" width="200"></el-table-column>
+            <el-table-column prop="duration" label="预计时间" width="200">
+              <template slot-scope="scope">{{scope.row.duration}} 天</template>
+            </el-table-column>
+            <el-table-column prop="time_consuming" label="消耗时间" width="200">
+               <template slot-scope="scope">{{scope.row.beginTime | consumedTime}} 天</template>
+              </el-table-column>
+            <el-table-column prop="remaining_time" label="剩余" width="200">
+              <template slot-scope="scope">{{scope.row.endTime | remainTime}} 天</template>
+            </el-table-column>
+            <el-table-column prop="schedule" label="总进度" width="200">
+              <template slot-scope="scope">{{progressByDay(scope.row.beginTime,scope.row.endTime)}}%</template>
+            </el-table-column>
           </el-table>
           <el-pagination
             @size-change="handleSizeChange"
@@ -72,6 +80,14 @@ export default {
       this.currentPage = val; //丢进去查询里，重新查询
       console.log(val);
       this.loadData();
+    },
+
+    progressByDay(beginDate,endDate) {
+      const current = new Date();
+      const consumedDate = moment(current).diff(beginDate,'day')
+      const totalDay = moment(endDate).diff(beginDate,'day')
+      if(totalDay == 0) return 0;
+      return Math.round((consumedDate / totalDay) * 100)
     }
   },
 
@@ -82,6 +98,12 @@ export default {
     },
     dateFrm: function(el){
       return moment(el).format("YYYY-MM-DD")
+    },
+    consumedTime(beginTime) {
+      return moment(new Date()).diff(beginTime,'day')
+    },
+    remainTime(endTime) {
+      return moment(endTime).diff(new Date(),'day')
     }
   },
 
