@@ -4,9 +4,9 @@
       <div class="work-station">
         <template>
           <el-table :data="projectTable">
-            <el-table-column prop="projectName" label="项目名称" width="200"></el-table-column>
+            <el-table-column prop="projectName" label="项目名称" width="290"></el-table-column>
             <el-table-column prop="endTime" label="结束日期" width="200">
-              <template slot-scope="scope">{{scope.endTime | dateFrm}}</template>
+              <template slot-scope="scope">{{scope.row.endTime | dateFrm}}</template>
             </el-table-column>
             <el-table-column prop="projectStatus" label="项目状态" width="200">
               <template slot-scope="scope">{{scope.row.projectStatus | statusType}}</template>

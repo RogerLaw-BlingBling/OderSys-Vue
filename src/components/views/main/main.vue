@@ -1,5 +1,6 @@
 <template>
   <div class="content">
+    
     <el-container style="height:100%;">
       <el-header style="padding:0">
         <div class="top-header">
@@ -18,12 +19,12 @@
               <el-dropdown trigger="hover" @command="handleUserDropdown">
                 <span class="el-dropdown-link userinfo-inner">
                   <img src="../../../assets/logo.png">
-                  {{username}}
+                  {{nickname}}
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item command='myMessage'>我的消息</el-dropdown-item>
-                  <el-dropdown-item command='mySettings'>设置</el-dropdown-item>
-                  <el-dropdown-item command='logout'>退出登录</el-dropdown-item>
+                  <el-dropdown-item command="myMessage">我的消息</el-dropdown-item>
+                  <el-dropdown-item command="mySettings">设置</el-dropdown-item>
+                  <el-dropdown-item command="logout">退出登录</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
             </el-col>
@@ -39,21 +40,21 @@
               class="el-menu-vertical-demo"
               @open="handleOpen"
               @close="handleClose"
-              background-color="#545c64"
+              background-color="#999999"
               text-color="#fff"
               theme="dark"
               active-text-color="#ffd04b"
             >
               <el-submenu index="1">
                 <template slot="title">
-                  <i class="el-icon-plus"></i>
+                  <i class="el-icon-plus" style="color:white"></i>
                   &nbsp;&nbsp;客户管理
                 </template>
                 <el-menu-item index="userList" @click="toCustomerList">客户列表</el-menu-item>
               </el-submenu>
               <el-submenu index="2">
                 <template slot="title">
-                  <i class="el-icon-document"></i>
+                  <i class="el-icon-document" style="color:white"></i>
                   &nbsp;&nbsp;订单管理
                 </template>
                 <el-menu-item index="oderList" @click="toOrderList">订单列表</el-menu-item>
@@ -61,7 +62,7 @@
               </el-submenu>
               <el-submenu index="3">
                 <template slot="title">
-                  <i class="el-icon-tickets"></i>
+                  <i class="el-icon-tickets" style="color:white"></i>
                   &nbsp;&nbsp;项目管理
                 </template>
                 <el-menu-item index="proceeding" @click="toProceedingProject">进行中的项目</el-menu-item>
@@ -70,28 +71,28 @@
               </el-submenu>
               <el-submenu index="4">
                 <template slot="title">
-                  <i class="el-icon-star-on"></i>
+                  <i class="el-icon-star-on" style="color:white"></i>
                   &nbsp;&nbsp;财务管理
                 </template>
                 <el-menu-item index="accounting" @click="toAccountingDetail">记账明细</el-menu-item>
               </el-submenu>
               <el-submenu index="5">
                 <template slot="title">
-                  <i class="el-icon-menu"/>
+                  <i class="el-icon-menu" style="color:white"/>
                   &nbsp;&nbsp;数据统计
                 </template>
                 <el-menu-item index="contractList" @click="toBusinessStatistics">业务统计</el-menu-item>
               </el-submenu>
               <el-submenu index="6">
                 <template slot="title">
-                  <i class="el-icon-setting"></i>
+                  <i class="el-icon-setting" style="color:white" ></i>
                   &nbsp;&nbsp;设置
                 </template>
                 <el-menu-item index="adminSet">&nbsp;&nbsp;管理员设置</el-menu-item>
               </el-submenu>
               <el-submenu index="7">
                 <template slot="title">
-                  <i class="el-icon-warning"></i>
+                  <i class="el-icon-warning" style="color:white"></i>
                   &nbsp;&nbsp;说明
                 </template>
                 <el-menu-item index="adminSet">说明</el-menu-item>
@@ -114,4 +115,15 @@
 
 <style lang="less" scoped>
 @import "../main/main.less";
+.content {
+  // background-color: red;
+
+  
+    background-image: url("/static/images/AAAAAA.jpg");
+    height: 100%;
+    width: 100%;
+    // background-repeat: no-repeat;
+    
+  
+}
 </style>

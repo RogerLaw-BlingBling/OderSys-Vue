@@ -29,7 +29,7 @@
     </div>
 
     <template>
-      <el-table :data="demandDataTable" style="width: 100%">
+      <el-table :data="demandDataTable" style="width: 85%">
         <el-table-column prop="demand.title" label="需求文件" width="500"></el-table-column>
         <el-table-column prop="project.projectName" label="项目名" width="300" sortable></el-table-column>
         <el-table-column label="上传时间" width="230" sortable>

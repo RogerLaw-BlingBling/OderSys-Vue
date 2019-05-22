@@ -21,11 +21,11 @@
       highlight-current-row
       v-loading="listLoading"
       @selection-change="selsChange"
-      style="width: 75%;"
+      style="width: 80%;"
     >
       <!-- <el-table-column type="selection" width="55"></el-table-column> -->
       <el-table-column type="index" width="60"></el-table-column>
-      <el-table-column prop="projectName" label="项目名" width="230" sortable></el-table-column>
+      <el-table-column prop="projectName" label="项目名" width="290" sortable></el-table-column>
       <el-table-column label="工程状态" width="150" sortable>
         <template slot-scope="scope">{{scope.row.projectStatus | statusType}}</template>
       </el-table-column>

@@ -1,4 +1,5 @@
 <template>
+
   <div class="view">
     <div class="text">
       <span>{{currentDate}}</span>
@@ -18,8 +19,6 @@ export default {
       currentTime: "",
       currentDay: "",
       value: new Date(),
-      src:
-        "https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg"
     };
   },
   mounted() {
@@ -85,11 +84,11 @@ export default {
 .bg {
   width: 100%;
   height: 100%;
-  // border: 1px solid red;
   margin: 0;
   padding: 0;
   position: absolute;
   z-index: 0;
+  background: url()
 }
 
 .text {

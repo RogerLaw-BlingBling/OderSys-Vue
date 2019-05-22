@@ -70,6 +70,9 @@ export default {
     },
     username() {
       return store.state.user.username
+    },
+    nickname(){
+      return store.state.user.nickname
     }
   },
   created() {

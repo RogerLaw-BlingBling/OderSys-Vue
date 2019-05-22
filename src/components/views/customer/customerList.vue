@@ -55,12 +55,12 @@
     <br>
     <div class="customerTable">
       <!-- 显示表格 -->
-      <el-table :data="customerTable" border style="width: 74%">
-        <el-table-column fixed prop="customerName" label="客户名" width="150"></el-table-column>
-        <el-table-column prop="address" label="客户地址" width="120"></el-table-column>
-        <el-table-column prop="contactPerson" label="联系人" width="120"></el-table-column>
+      <el-table :data="customerTable" border style="width: 91%">
+        <el-table-column fixed prop="customerName" label="客户名" width="220"></el-table-column>
+        <el-table-column prop="address" label="客户地址" width="220"></el-table-column>
+        <el-table-column prop="contactPerson" label="联系人" width="90"></el-table-column>
         <el-table-column prop="mobilePhone" label="联系方式" width="120"></el-table-column>
-        <el-table-column prop="email" label="邮箱" width="120"></el-table-column>
+        <el-table-column prop="email" label="邮箱" width="220"></el-table-column>
         <el-table-column prop="bankName" label="开户银行" width="120"></el-table-column>
         <el-table-column prop="bankAccountNum" label="银行卡号" width="200"></el-table-column>
         <el-table-column label="操作" width="100">
